@@ -15,6 +15,7 @@ export class GlobeEngine {
   init() {
     // Scene
     this.scene = new THREE.Scene()
+    this.scene.background = new THREE.Color(0x020509)
 
     // Renderer
     this.renderer = new THREE.WebGLRenderer({
@@ -42,6 +43,7 @@ export class GlobeEngine {
 
     this.buildGlobe()
     this.buildAtmosphere()
+    this.buildStarfield
     this.scene.add(this.markers)
     this.bindEvents()
     this.animate()
@@ -84,6 +86,38 @@ export class GlobeEngine {
     this.atmosphere = new THREE.Mesh(geometry, material)
     this.scene.add(this.atmosphere)
   }
+  buildStarfield() {
+  const geometry = new THREE.BufferGeometry()
+  const count    = 6000
+  const positions = new Float32Array(count * 3)
+  const sizes     = new Float32Array(count)
+
+  for (let i = 0; i < count; i++) {
+    // Random point on a large sphere around the globe
+    const theta = Math.random() * Math.PI * 2
+    const phi   = Math.acos(2 * Math.random() - 1)
+    const r     = 80 + Math.random() * 120
+
+    positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta)
+    positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
+    positions[i * 3 + 2] = r * Math.cos(phi)
+    sizes[i] = Math.random() * 1.5 + 0.3
+  }
+
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+  geometry.setAttribute('size',     new THREE.BufferAttribute(sizes, 1))
+
+  const material = new THREE.PointsMaterial({
+    color:       0xffffff,
+    size:        0.15,
+    sizeAttenuation: true,
+    transparent: true,
+    opacity:     0.85,
+  })
+
+  const stars = new THREE.Points(geometry, material)
+  this.scene.add(stars)
+}
 
   bindEvents() {
     const c = this.canvas
