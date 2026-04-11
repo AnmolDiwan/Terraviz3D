@@ -5,8 +5,10 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import pg from 'pg'
 import dotenv from 'dotenv'
+import { ragQuery, indexDataPoints } from './ragAgent.js'
 
 dotenv.config()
+console.log('GEMINI KEY:', process.env.GEMINI_API_KEY?.slice(0, 10) + '...')
 
 const app = express()
 const { Pool } = pg
@@ -28,7 +30,7 @@ db.connect()
 // ── Middleware ───────────────────────────────────────────────
 app.use(helmet())
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }))
-app.use(express.json())
+app.use(express.json({ limit: '10mb' }))
 
 // ── Auth middleware (protects routes that need login) ────────
 const requireAuth = async (req, res, next) => {
@@ -258,6 +260,43 @@ app.get('/api/auth/me', requireAuth, async (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ status: 'TerraViz backend is alive', time: new Date() })
 })
+// ── AI Routes ─────────────────────────────────────────────────
+
+// Index earthquake data for RAG
+app.post('/api/ai/index', requireAuth, async (req, res) => {
+  console.log('[AI] /api/ai/index called, body size:', JSON.stringify(req.body).length, 'bytes')
+  const { dataPoints } = req.body
+  if (!Array.isArray(dataPoints) || dataPoints.length === 0) {
+    console.error('[AI] No dataPoints in body. Keys:', Object.keys(req.body || {}))
+    return res.status(400).json({ error: 'dataPoints array required' })
+  }
+  try {
+    await indexDataPoints(dataPoints)
+    res.json({ success: true, message: `Indexed ${dataPoints.length} points` })
+  } catch (err) {
+    console.error('[AI] Index error:', err.message)
+    res.status(500).json({ error: 'Indexing failed' })
+  }
+})
+// Query the RAG agent
+app.post('/api/ai/query', requireAuth, async (req, res) => {
+  const { query, layerContext } = req.body
+  if (!query?.trim()) {
+    return res.status(400).json({ error: 'Query is required' })
+  }
+  try {
+    const result = await ragQuery(query, layerContext)
+    return res.json(result)
+  } catch (err) {
+    console.error('[AI] Query error:', err.message)
+    return res.status(500).json({
+      error: 'AI unavailable',
+      answer: 'Sorry, I could not process your request right now.',
+      markers: []
+    })
+  }
+})
+
 
 // ── Start server ──────────────────────────────────────────────
 app.listen(process.env.PORT, () => {
