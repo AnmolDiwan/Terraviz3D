@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser'
 import { ragQuery, indexDataPoints } from './ragAgent.js'
 import db from './config/db.js'
 import requireAuth from './middleware/auth.js'
+import { authLimiter, aiLimiter } from './middleware/rateLimiter.js'
 
 console.log('GEMINI KEY:', env.GEMINI_API_KEY?.slice(0, 10) + '...')
 
@@ -27,6 +28,8 @@ app.use(cookieParser())
 // ══════════════════════════════════════════════════════════════
 // AUTH ROUTES
 // ══════════════════════════════════════════════════════════════
+
+app.use('/api/auth', authLimiter)
 
 // ── REGISTER ─────────────────────────────────────────────────
 app.post('/api/auth/register', async (req, res) => {
@@ -243,6 +246,8 @@ app.get('/health', (req, res) => {
   res.json({ status: 'TerraViz backend is alive', time: new Date() })
 })
 // ── AI Routes ─────────────────────────────────────────────────
+
+app.use('/api/ai', aiLimiter)
 
 // Index earthquake data for RAG
 app.post('/api/ai/index', requireAuth, async (req, res) => {
