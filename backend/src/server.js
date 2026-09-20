@@ -1,26 +1,15 @@
+import env from './config/env.js'
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import pg from 'pg'
-import dotenv from 'dotenv'
 import { ragQuery, indexDataPoints } from './ragAgent.js'
+import db from './config/db.js'
 
-dotenv.config()
-console.log('GEMINI KEY:', process.env.GEMINI_API_KEY?.slice(0, 10) + '...')
+console.log('GEMINI KEY:', env.GEMINI_API_KEY?.slice(0, 10) + '...')
 
 const app = express()
-const { Pool } = pg
-
-// ── Database connection ──────────────────────────────────────
-const db = new Pool({
-  host:     process.env.DB_HOST,
-  port:     process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user:     process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-})
 
 // Test DB connection on startup
 db.connect()
@@ -29,7 +18,7 @@ db.connect()
 
 // ── Middleware ───────────────────────────────────────────────
 app.use(helmet())
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }))
+app.use(cors({ origin: env.FRONTEND_URL, credentials: true }))
 app.use(express.json({ limit: '10mb' }))
 
 // ── Auth middleware (protects routes that need login) ────────
@@ -40,7 +29,7 @@ const requireAuth = async (req, res, next) => {
   }
   const token = header.slice(7)
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET)
+    const payload = jwt.verify(token, env.JWT_SECRET)
     req.userId   = payload.userId
     req.userRole = payload.role
     next()
@@ -166,8 +155,8 @@ app.post('/api/auth/login', async (req, res) => {
     // Generate JWT
     const token     = jwt.sign(
       { userId: user.user_id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES }
+      env.JWT_SECRET,
+      { expiresIn: env.JWT_EXPIRES }
     )
     const expiresAt = new Date(Date.now() + 2 * 60 * 60 * 1000)
 
@@ -299,6 +288,6 @@ app.post('/api/ai/query', requireAuth, async (req, res) => {
 
 
 // ── Start server ──────────────────────────────────────────────
-app.listen(process.env.PORT, () => {
-  console.log(`🚀 Backend running → http://localhost:${process.env.PORT}`)
+app.listen(env.PORT, () => {
+  console.log(`🚀 Backend running → http://localhost:${env.PORT}`)
 })

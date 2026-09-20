@@ -1,17 +1,18 @@
-// Database connection and configuration
 import pg from 'pg';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import env from './env.js';
 
 const { Pool } = pg;
 
 const db = new Pool({
-  host:     process.env.DB_HOST,
-  port:     process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user:     process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  host:     env.DB_HOST,
+  port:     env.DB_PORT,
+  database: env.DB_NAME,
+  user:     env.DB_USER,
+  password: env.DB_PASSWORD,
+});
+
+db.on('error', (err) => {
+  console.error('Unexpected error on idle client', err);
 });
 
 export default db;
