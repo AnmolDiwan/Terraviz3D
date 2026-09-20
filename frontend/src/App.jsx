@@ -3,6 +3,9 @@ import { GlobeEngine } from './components/GlobeEngine'
 import AIChatPanel from './components/AIChatpanel'
 import './App.css'
 
+// Define your API base URL here (e.g., import.meta.env.VITE_API_BASE || 'http://localhost:5000')
+const API_BASE = import.meta.env.VITE_API_URL || ''
+
 // ── Twinkling stars background ───────────────────────────────
 function Stars() {
   const layers = [
@@ -62,7 +65,9 @@ function AuthModal({ onClose, onSuccess }) {
 
     setLoading(true)
     try {
-      const url = mode === 'login' ? '/api/auth/login' : '/api/auth/register'
+      // 1. CHANGED: Appended ${API_BASE} to the login and register routes
+      const url = mode === 'login' ? `${API_BASE}/api/auth/login` : `${API_BASE}/api/auth/register`
+      
       const body = mode === 'login'
         ? { username: form.username, password: form.password }
         : { username: form.username, email: form.email, password: form.password }
@@ -674,7 +679,8 @@ export default function App() {
 
       try {
         const token = localStorage.getItem('tv3d_token')
-        const indexRes = await fetch('/api/ai/index', {
+        // 2. CHANGED: This already had ${API_BASE} in your code, keeping it
+        const indexRes = await fetch(`${API_BASE}/api/ai/index`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -741,7 +747,8 @@ export default function App() {
   const logout = async () => {
     const token = localStorage.getItem('tv3d_token')
     if (token && sessionId) {
-      await fetch('/api/auth/logout', {
+      // 3. CHANGED: This already had ${API_BASE} in your code, keeping it
+      await fetch(`${API_BASE}/api/auth/logout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ sessionId })
