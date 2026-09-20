@@ -4,8 +4,10 @@ import cors from 'cors'
 import helmet from 'helmet'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import cookieParser from 'cookie-parser'
 import { ragQuery, indexDataPoints } from './ragAgent.js'
 import db from './config/db.js'
+import requireAuth from './middleware/auth.js'
 
 console.log('GEMINI KEY:', env.GEMINI_API_KEY?.slice(0, 10) + '...')
 
@@ -20,23 +22,7 @@ db.connect()
 app.use(helmet())
 app.use(cors({ origin: env.FRONTEND_URL, credentials: true }))
 app.use(express.json({ limit: '10mb' }))
-
-// ── Auth middleware (protects routes that need login) ────────
-const requireAuth = async (req, res, next) => {
-  const header = req.headers.authorization
-  if (!header?.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'No token provided' })
-  }
-  const token = header.slice(7)
-  try {
-    const payload = jwt.verify(token, env.JWT_SECRET)
-    req.userId   = payload.userId
-    req.userRole = payload.role
-    next()
-  } catch {
-    return res.status(401).json({ error: 'Invalid or expired token' })
-  }
-}
+app.use(cookieParser())
 
 // ══════════════════════════════════════════════════════════════
 // AUTH ROUTES
@@ -178,9 +164,15 @@ app.post('/api/auth/login', async (req, res) => {
       [user.user_id, 'LOGIN_SUCCESS']
     )
 
+    res.cookie('tv3d_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 2 * 60 * 60 * 1000
+    })
+
     return res.json({
       success: true,
-      token,
       expiresAt,
       session: {
         sessionId: sessionResult.rows[0].session_id,
@@ -220,6 +212,7 @@ app.post('/api/auth/logout', requireAuth, async (req, res) => {
         [sesResult.rows[0].user_id, 'LOGOUT']
       )
     }
+    res.clearCookie('tv3d_token')
     return res.json({ success: true })
   } catch (err) {
     console.error('Logout error:', err.message)

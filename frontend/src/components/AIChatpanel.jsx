@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { apiFetch } from '../services/api.js'
 
 const EXAMPLES = [
   'Show earthquakes in Japan',
@@ -56,20 +57,11 @@ export default function AIChatPanel({ onClose, onMarkersReceived }) {
     setHistory(h => [...h, { role: 'user', text: question }])
 
     try {
-      const token = localStorage.getItem('tv3d_token')
-      const res   = await fetch('/api/ai/query', {
+      const API_BASE = import.meta.env.VITE_API_URL || ''
+      const data = await apiFetch(`${API_BASE}/api/ai/query`, {
         method:  'POST',
-        headers: {
-          'Content-Type':  'application/json',
-          'Authorization': `Bearer ${token}`
-        },
         body: JSON.stringify({ query: question, layerContext: 'earthquakes' })
       })
-      const data = await res.json()
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Request failed.')
-      }
 
       setHistory(h => [...h, { role: 'ai', text: data.answer || 'Found no intelligence.' }])
       setSources(data.sources || [])
@@ -80,8 +72,8 @@ export default function AIChatPanel({ onClose, onMarkersReceived }) {
     } catch (err) {
       setHistory(h => [...h, {
         role: 'ai',
-        text: err.message === 'Failed to fetch' 
-          ? 'Sorry, I could not connect to the backend service. Is it running?' 
+        text: err.message === 'Failed to fetch' || err.message.includes('Authentication expired')
+          ? 'Sorry, I could not connect to the backend service or your session expired.' 
           : `⚠ Error: ${err.message}`
       }])
     } finally {

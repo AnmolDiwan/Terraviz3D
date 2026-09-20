@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { GlobeEngine } from './components/GlobeEngine'
 import AIChatPanel from './components/AIChatpanel'
+import { apiFetch } from './services/api.js'
 import './App.css'
 
 // Define your API base URL here (e.g., import.meta.env.VITE_API_BASE || 'http://localhost:5000')
@@ -72,14 +73,10 @@ function AuthModal({ onClose, onSuccess }) {
         ? { username: form.username, password: form.password }
         : { username: form.username, email: form.email, password: form.password }
 
-      const res = await fetch(url, {
+      const data = await apiFetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       })
-      const data = await res.json()
-
-      if (!res.ok) { setError(data.error || 'Something went wrong'); return }
 
       if (mode === 'register') {
         setMode('login')
@@ -89,12 +86,14 @@ function AuthModal({ onClose, onSuccess }) {
         return
       }
 
-      localStorage.setItem('tv3d_token', data.token)
-      localStorage.setItem('tv3d_session', JSON.stringify(data.session))
       onSuccess(data.session.user, data.session.sessionId)
       onClose()
-    } catch {
-      setError('Cannot connect to server. Is the backend running?')
+    } catch (err) {
+      if (err.message === 'Failed to fetch' || err.message.includes('Authentication expired')) {
+        setError('Cannot connect to server. Is the backend running?')
+      } else {
+        setError(err.message)
+      }
     } finally {
       setLoading(false)
     }
@@ -643,15 +642,17 @@ export default function App() {
     if (!canvasRef.current) return
     engineRef.current = new GlobeEngine(canvasRef.current, dp => setSelected(dp))
 
-    const saved = localStorage.getItem('tv3d_session')
-    if (saved) {
-      try {
-        const session = JSON.parse(saved)
-        setUser(session.user)
-        setSessionId(session.sessionId)
-      } catch { localStorage.removeItem('tv3d_session') }
+    const handleAuthExpired = () => {
+      setUser(null)
+      setSessionId(null)
+      setShowAuth(true)
     }
-    return () => engineRef.current?.dispose()
+    window.addEventListener('auth:expired', handleAuthExpired)
+
+    return () => {
+      engineRef.current?.dispose()
+      window.removeEventListener('auth:expired', handleAuthExpired)
+    }
   }, [])
 
   const loadEarthquakes = async () => {
@@ -678,24 +679,13 @@ export default function App() {
       setStatus(`${points.length} earthquakes loaded`)
 
       try {
-        const token = localStorage.getItem('tv3d_token')
         // 2. CHANGED: This already had ${API_BASE} in your code, keeping it
-        const indexRes = await fetch(`${API_BASE}/api/ai/index`, {
+        await apiFetch(`${API_BASE}/api/ai/index`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
           body: JSON.stringify({ dataPoints: points })
         })
-        const indexData = await indexRes.json()
-        if (indexRes.ok) {
-          console.log('[AI] ✅ Data indexed:', indexData.message)
-        } else {
-          console.error('[AI] ❌ Index failed:', indexRes.status, indexData)
-        }
-      } catch (e) {
-        console.warn('[AI] Index request error:', e)
+      } catch (err) {
+        console.warn('AI index failed/network error', err)
       }
 
     } catch {
@@ -745,17 +735,17 @@ export default function App() {
   }
 
   const logout = async () => {
-    const token = localStorage.getItem('tv3d_token')
-    if (token && sessionId) {
+    if (sessionId) {
       // 3. CHANGED: This already had ${API_BASE} in your code, keeping it
-      await fetch(`${API_BASE}/api/auth/logout`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ sessionId })
-      })
+      try {
+        await apiFetch(`${API_BASE}/api/auth/logout`, {
+          method: 'POST',
+          body: JSON.stringify({ sessionId })
+        })
+      } catch (e) {
+        // ignore logout errors
+      }
     }
-    localStorage.removeItem('tv3d_token')
-    localStorage.removeItem('tv3d_session')
     setUser(null); setSessionId(null); clearLayer()
   }
 
