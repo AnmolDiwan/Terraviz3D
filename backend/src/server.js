@@ -5,10 +5,11 @@ import helmet from 'helmet'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser'
-import { ragQuery, indexDataPoints } from './ragAgent.js'
 import db from './config/db.js'
 import requireAuth from './middleware/auth.js'
 import { authLimiter, aiLimiter } from './middleware/rateLimiter.js'
+import aiRoutes from './routes/ai.routes.js'
+import errorHandler from './middleware/errorHandler.js'
 
 console.log('GEMINI KEY:', env.GEMINI_API_KEY?.slice(0, 10) + '...')
 
@@ -248,42 +249,10 @@ app.get('/health', (req, res) => {
 // ── AI Routes ─────────────────────────────────────────────────
 
 app.use('/api/ai', aiLimiter)
+app.use('/api/ai', aiRoutes)
 
-// Index earthquake data for RAG
-app.post('/api/ai/index', requireAuth, async (req, res) => {
-  console.log('[AI] /api/ai/index called, body size:', JSON.stringify(req.body).length, 'bytes')
-  const { dataPoints } = req.body
-  if (!Array.isArray(dataPoints) || dataPoints.length === 0) {
-    console.error('[AI] No dataPoints in body. Keys:', Object.keys(req.body || {}))
-    return res.status(400).json({ error: 'dataPoints array required' })
-  }
-  try {
-    await indexDataPoints(dataPoints)
-    res.json({ success: true, message: `Indexed ${dataPoints.length} points` })
-  } catch (err) {
-    console.error('[AI] Index error:', err.message)
-    res.status(500).json({ error: 'Indexing failed' })
-  }
-})
-// Query the RAG agent
-app.post('/api/ai/query', requireAuth, async (req, res) => {
-  const { query, layerContext } = req.body
-  if (!query?.trim()) {
-    return res.status(400).json({ error: 'Query is required' })
-  }
-  try {
-    const result = await ragQuery(query, layerContext)
-    return res.json(result)
-  } catch (err) {
-    console.error('[AI] Query error:', err.message)
-    return res.status(500).json({
-      error: 'AI unavailable',
-      answer: 'Sorry, I could not process your request right now.',
-      markers: []
-    })
-  }
-})
 
+app.use(errorHandler)
 
 // ── Start server ──────────────────────────────────────────────
 app.listen(env.PORT, () => {
