@@ -9,6 +9,7 @@ import db from './config/db.js'
 import requireAuth from './middleware/auth.js'
 import { authLimiter, aiLimiter } from './middleware/rateLimiter.js'
 import aiRoutes from './routes/ai.routes.js'
+import geoRoutes from './routes/geo.routes.js'
 import errorHandler from './middleware/errorHandler.js'
 
 console.log('GEMINI KEY:', env.GEMINI_API_KEY?.slice(0, 10) + '...')
@@ -243,18 +244,28 @@ app.get('/api/auth/me', requireAuth, async (req, res) => {
 })
 
 // ── Health check ──────────────────────────────────────────────
-app.get('/health', (req, res) => {
-  res.json({ status: 'TerraViz backend is alive', time: new Date() })
+app.get('/health', async (req, res) => {
+  try {
+    await db.query('SELECT 1')
+    res.status(200).json({ status: 'ok', db: 'ok', timestamp: new Date().toISOString() })
+  } catch (error) {
+    res.status(503).json({ status: 'degraded', db: 'unreachable', timestamp: new Date().toISOString() })
+  }
 })
 // ── AI Routes ─────────────────────────────────────────────────
 
 app.use('/api/ai', aiLimiter)
 app.use('/api/ai', aiRoutes)
 
+// ── Geo Routes ────────────────────────────────────────────────
+app.use('/api/geo', geoRoutes)
 
 app.use(errorHandler)
 
 // ── Start server ──────────────────────────────────────────────
 app.listen(env.PORT, () => {
   console.log(`🚀 Backend running → http://localhost:${env.PORT}`)
+  console.log(`📡 DB host → ${env.DB_HOST || 'localhost'}`)
+  console.log(`🌍 Node env → ${process.env.NODE_ENV || 'development'}`)
+  console.log(`🧠 RAG system: pgvector + graph indexing`)
 })

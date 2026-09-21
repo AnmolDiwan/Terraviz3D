@@ -1,3 +1,9 @@
-// Geospatial data routes
+import { Router } from 'express';
+import { earthquakesHandler, countriesHandler } from '../controllers/geo.controller.js';
 
-export {};
+const router = Router();
+
+router.get('/earthquakes', earthquakesHandler);
+router.get('/countries', countriesHandler);
+
+export default router;

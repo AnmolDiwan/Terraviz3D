@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { apiFetch } from '../services/api.js'
+import { aiService } from '../services/ai.service.js'
 
 const EXAMPLES = [
   'Show earthquakes in Japan',
@@ -57,11 +57,7 @@ export default function AIChatPanel({ onClose, onMarkersReceived }) {
     setHistory(h => [...h, { role: 'user', text: question }])
 
     try {
-      const API_BASE = import.meta.env.VITE_API_URL || ''
-      const data = await apiFetch(`${API_BASE}/api/ai/query`, {
-        method:  'POST',
-        body: JSON.stringify({ query: question, layerContext: 'earthquakes' })
-      })
+      const data = await aiService.query(question, 'earthquakes')
 
       setHistory(h => [...h, { role: 'ai', text: data.answer || 'Found no intelligence.' }])
       setSources(data.sources || [])

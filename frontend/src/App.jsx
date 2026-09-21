@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { GlobeEngine } from './components/GlobeEngine'
 import AIChatPanel from './components/AIChatpanel'
-import { apiFetch } from './services/api.js'
+import { useAuth } from './hooks/useAuth.js'
+import { geoService } from './services/geo.service.js'
+import { aiService } from './services/ai.service.js'
 import './App.css'
-
-// Define your API base URL here (e.g., import.meta.env.VITE_API_BASE || 'http://localhost:5000')
-const API_BASE = import.meta.env.VITE_API_URL || ''
 
 // ── Twinkling stars background ───────────────────────────────
 function Stars() {
@@ -50,7 +49,7 @@ function Stars() {
 }
 
 // ── Auth Modal ───────────────────────────────────────────────
-function AuthModal({ onClose, onSuccess }) {
+function AuthModal({ onClose, login, register }) {
   const [mode, setMode] = useState('login')
   const [form, setForm] = useState({ username: '', email: '', password: '' })
   const [error, setError] = useState('')
@@ -66,19 +65,8 @@ function AuthModal({ onClose, onSuccess }) {
 
     setLoading(true)
     try {
-      // 1. CHANGED: Appended ${API_BASE} to the login and register routes
-      const url = mode === 'login' ? `${API_BASE}/api/auth/login` : `${API_BASE}/api/auth/register`
-      
-      const body = mode === 'login'
-        ? { username: form.username, password: form.password }
-        : { username: form.username, email: form.email, password: form.password }
-
-      const data = await apiFetch(url, {
-        method: 'POST',
-        body: JSON.stringify(body),
-      })
-
       if (mode === 'register') {
+        await register(form.username, form.email, form.password)
         setMode('login')
         setError('')
         setForm(f => ({ ...f, password: '' }))
@@ -86,7 +74,7 @@ function AuthModal({ onClose, onSuccess }) {
         return
       }
 
-      onSuccess(data.session.user, data.session.sessionId)
+      await login(form.username, form.password)
       onClose()
     } catch (err) {
       if (err.message === 'Failed to fetch' || err.message.includes('Authentication expired')) {
@@ -627,12 +615,11 @@ function Sidebar({ user, layerOn, popLayerOn, status, onEarthquakes, onPopulatio
 
 // ── Main App ─────────────────────────────────────────────────
 export default function App() {
+  const { user, loading: authLoading, login, register, logout } = useAuth()
   const canvasRef = useRef(null)
   const engineRef = useRef(null)
   const [selected, setSelected] = useState(null)
   const [status, setStatus] = useState('')
-  const [user, setUser] = useState(null)
-  const [sessionId, setSessionId] = useState(null)
   const [showAuth, setShowAuth] = useState(false)
   const [layerOn, setLayerOn] = useState(false)
   const [popLayerOn, setPopLayerOn] = useState(false)
@@ -642,16 +629,8 @@ export default function App() {
     if (!canvasRef.current) return
     engineRef.current = new GlobeEngine(canvasRef.current, dp => setSelected(dp))
 
-    const handleAuthExpired = () => {
-      setUser(null)
-      setSessionId(null)
-      setShowAuth(true)
-    }
-    window.addEventListener('auth:expired', handleAuthExpired)
-
     return () => {
       engineRef.current?.dispose()
-      window.removeEventListener('auth:expired', handleAuthExpired)
     }
   }, [])
 
@@ -660,8 +639,7 @@ export default function App() {
     setStatus('FETCHING DATA...')
     setLayerOn(true)
     try {
-      const res = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson')
-      const json = await res.json()
+      const json = await geoService.getEarthquakes()
       const points = json.features.map(f => ({
         lat: f.geometry.coordinates[1],
         lng: f.geometry.coordinates[0],
@@ -679,11 +657,7 @@ export default function App() {
       setStatus(`${points.length} earthquakes loaded`)
 
       try {
-        // 2. CHANGED: This already had ${API_BASE} in your code, keeping it
-        await apiFetch(`${API_BASE}/api/ai/index`, {
-          method: 'POST',
-          body: JSON.stringify({ dataPoints: points })
-        })
+        await aiService.indexPoints(points)
       } catch (err) {
         console.warn('AI index failed/network error', err)
       }
@@ -705,8 +679,7 @@ export default function App() {
     setStatus('FETCHING POPULATION DATA...')
     setPopLayerOn(true)
     try {
-      const res = await fetch('https://restcountries.com/v3.1/all?fields=name,population,latlng,capital,region')
-      const json = await res.json()
+      const json = await geoService.getCountries()
       const points = json
         .filter(c => c.latlng?.length === 2 && c.population > 0)
         .map(c => ({
@@ -734,19 +707,9 @@ export default function App() {
     setStatus(''); setLayerOn(false); setPopLayerOn(false); setSelected(null)
   }
 
-  const logout = async () => {
-    if (sessionId) {
-      // 3. CHANGED: This already had ${API_BASE} in your code, keeping it
-      try {
-        await apiFetch(`${API_BASE}/api/auth/logout`, {
-          method: 'POST',
-          body: JSON.stringify({ sessionId })
-        })
-      } catch (e) {
-        // ignore logout errors
-      }
-    }
-    setUser(null); setSessionId(null); clearLayer()
+  const handleLogout = async () => {
+    await logout()
+    clearLayer()
   }
 
   return (
@@ -763,7 +726,7 @@ export default function App() {
           user={user} layerOn={layerOn} popLayerOn={popLayerOn} status={status}
           onEarthquakes={loadEarthquakes} onPopulation={loadPopulation}
           onClear={clearLayer}
-          onShowAuth={() => setShowAuth(true)} onLogout={logout}
+          onShowAuth={() => setShowAuth(true)} onLogout={handleLogout}
           onToggleAI={() => setShowAI(v => !v)}
         />
 
@@ -783,7 +746,8 @@ export default function App() {
         {showAuth && (
           <AuthModal
             onClose={() => setShowAuth(false)}
-            onSuccess={(u, sid) => { setUser(u); setSessionId(sid) }}
+            login={login}
+            register={register}
           />
         )}
       </div>
