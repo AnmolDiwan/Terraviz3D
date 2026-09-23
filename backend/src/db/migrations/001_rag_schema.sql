@@ -1,5 +1,7 @@
-CREATE EXTENSION IF NOT EXISTS vector;
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
+DROP TABLE IF EXISTS rag_edges CASCADE;
+DROP TABLE IF EXISTS rag_chunks CASCADE;
 
 CREATE TABLE rag_chunks (
     id SERIAL PRIMARY KEY,
@@ -7,7 +9,7 @@ CREATE TABLE rag_chunks (
     category VARCHAR(50) NOT NULL,
     chunk_type VARCHAR(20) NOT NULL,
     text TEXT NOT NULL,
-    embedding vector(384) NOT NULL,
+    embedding JSONB NOT NULL,
     metadata JSONB NOT NULL,
     indexed_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -21,7 +23,6 @@ CREATE TABLE rag_edges (
     UNIQUE(source_id, target_id, edge_type)
 );
 
-CREATE INDEX ON rag_chunks USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
 CREATE INDEX ON rag_chunks USING gin (metadata);
 CREATE INDEX ON rag_chunks USING gin (to_tsvector('english', text));
 CREATE INDEX ON rag_edges (source_id);

@@ -27,17 +27,29 @@ function reciprocalRankFusion(resultSets, k, kConstant = 60) {
 }
 
 async function retrieve(queryText, queryEmbedding, k = 8) {
-  const queryEmbStr = `[${queryEmbedding.join(',')}]`;
-  
-  // Stage 1: vector cosine search
-  const vRes = await db.query(`
-    SELECT *
+  // Stage 1: vector cosine search (fallback to JS)
+  const chunksRes = await db.query(`
+    SELECT id, text, metadata, embedding
     FROM rag_chunks
     WHERE chunk_type = 'primary'
-    ORDER BY embedding <=> $1
-    LIMIT $2
-  `, [queryEmbStr, k * 2]);
+  `);
   
+  const cosineSim = (vecA, vecB) => {
+    let dotProduct = 0, normA = 0, normB = 0;
+    for (let i = 0; i < vecA.length; i++) {
+        dotProduct += vecA[i] * vecB[i];
+        normA += vecA[i] * vecA[i];
+        normB += vecB[i] * vecB[i];
+    }
+    return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+  };
+
+  const vRes = {
+    rows: chunksRes.rows
+      .map(row => ({ ...row, score: cosineSim(queryEmbedding, row.embedding) }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, k * 2)
+  };  
   // Stage 2: full-text search
   const ftsRes = await db.query(`
     SELECT *
@@ -116,7 +128,7 @@ export async function indexDataPoints(dataPoints) {
       'earthquake', 
       'primary', 
       p.primaryText, 
-      `[${primaryEmbeddings[i].join(',')}]`, 
+      JSON.stringify(primaryEmbeddings[i]), 
       p.metadata
     ]);
 
@@ -133,7 +145,7 @@ export async function indexDataPoints(dataPoints) {
       'earthquake', 
       'context', 
       p.contextText, 
-      `[${contextEmbeddings[i].join(',')}]`, 
+      JSON.stringify(contextEmbeddings[i]), 
       p.metadata
     ]);
 
@@ -155,7 +167,7 @@ export async function ragQuery(query, layerContext) {
   const showIntent = /\b(show|display|mark|highlight|find|locate|where)\b/i.test(query);
 
   const completion = await groq.chat.completions.create({
-    model: 'llama-3.1-8b-instant',
+    model: 'openai/gpt-oss-20b',
     max_tokens: 400,
     temperature: 0.3,
     messages: [
