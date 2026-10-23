@@ -19,6 +19,14 @@ export const getEarthquakes = async () => {
   return data;
 };
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const COUNTRIES_PATH = path.join(__dirname, '..', 'data', 'countries.json');
+
 export const getCountries = async () => {
   const TTL = 86400000; // 24 hours
   const now = Date.now();
@@ -26,11 +34,39 @@ export const getCountries = async () => {
     console.log('[GeoService] Serving countries from cache...');
     return cache.countries.data;
   }
-  console.log('[GeoService] Fetching countries from REST Countries...');
-  const response = await fetch('https://restcountries.com/v3.1/all?fields=name,population,latlng,capital,region');
-  if (!response.ok) throw new Error('Failed to fetch countries');
-  const data = await response.json();
-  cache.countries.data = data;
-  cache.countries.fetchedAt = now;
-  return data;
+
+  // 1. Try local verified dataset first (fast, reliable, offline-ready)
+  try {
+    if (fs.existsSync(COUNTRIES_PATH)) {
+      const raw = fs.readFileSync(COUNTRIES_PATH, 'utf-8');
+      const data = JSON.parse(raw);
+      cache.countries.data = data;
+      cache.countries.fetchedAt = now;
+      console.log(`[GeoService] Loaded ${data.length} countries from local dataset.`);
+      return data;
+    }
+  } catch (err) {
+    console.warn('[GeoService] Failed to read local countries dataset:', err.message);
+  }
+
+  // 2. Fallback to remote mirror
+  console.log('[GeoService] Fetching countries data from remote mirror...');
+  try {
+    const response = await fetch('https://gist.githubusercontent.com/yesoreyeram/2433ce69862f452b9d0460c947ee191f/raw/countries.json');
+    if (!response.ok) throw new Error('Remote mirror failed');
+    const d = await response.json();
+    const mapped = d.map(c => ({
+      name: typeof c.name === 'string' ? { common: c.name } : c.name,
+      population: c.population || 0,
+      latlng: c.latlng || [],
+      capital: Array.isArray(c.capital) ? c.capital : (c.capital ? [c.capital] : []),
+      region: c.region || ''
+    }));
+    cache.countries.data = mapped;
+    cache.countries.fetchedAt = now;
+    return mapped;
+  } catch (err) {
+    console.error('[GeoService] Failed to fetch countries:', err.message);
+    throw err;
+  }
 };

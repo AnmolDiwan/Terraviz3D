@@ -1,5 +1,39 @@
 import * as THREE from 'three'
 
+const DAY_NIGHT_VERT = `
+  varying vec2 vUv;
+  varying vec3 vWorldNormal;
+
+  void main() {
+    vUv = uv;
+    vWorldNormal = normalize((modelMatrix * vec4(normal, 0.0)).xyz);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`
+
+const DAY_NIGHT_FRAG = `
+  uniform sampler2D dayMap;
+  uniform sampler2D nightMap;
+  uniform vec3 sunDirection;
+
+  varying vec2 vUv;
+  varying vec3 vWorldNormal;
+
+  void main() {
+    float sunDot = dot(vWorldNormal, normalize(sunDirection));
+    // Smooth transition at the terminator
+    float blend = smoothstep(-0.15, 0.25, sunDot);
+
+    vec4 day = texture2D(dayMap, vUv);
+    vec4 night = texture2D(nightMap, vUv);
+
+    // Night lights glow slightly brighter on dark side
+    vec4 nightBoosted = vec4(night.rgb * 1.8, night.a);
+
+    gl_FragColor = mix(nightBoosted, day, blend);
+  }
+`
+
 export class GlobeEngine {
   constructor(canvas, onMarkerClick) {
     this.canvas = canvas
@@ -41,24 +75,27 @@ export class GlobeEngine {
     Object.values(this.layerGroups).forEach(g => {
       g.rotation.copy(this.globe.rotation)
     })
+    if (this.baseAtmosphere) this.baseAtmosphere.rotation.copy(this.globe.rotation)
+    if (this.atmosphere) this.atmosphere.rotation.copy(this.globe.rotation)
+    if (this.innerAtmosphere) this.innerAtmosphere.rotation.copy(this.globe.rotation)
   }
 
   init() {
     this.scene = new THREE.Scene()
 
-    // ── GPU: Force dedicated GPU, enable high-quality rendering ──
+    // ── GPU: Dedicated GPU, high-performance rendering ──
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       antialias: true,
       alpha: true,
-      powerPreference: 'high-performance',  // ← Use dedicated GPU
-      stencil: false,                        // ← Disable unused buffer
+      powerPreference: 'high-performance',
+      stencil: false,
     })
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.renderer.setClearColor(0x000000, 0)
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping
-    this.renderer.toneMappingExposure = 1.1
+    this.renderer.toneMappingExposure = 1.2
     this.renderer.outputColorSpace = THREE.SRGBColorSpace
 
     // Log which GPU is being used
@@ -75,20 +112,16 @@ export class GlobeEngine {
     )
     this.camera.position.z = 2.5
 
-    // Lights — richer setup
-    const ambient = new THREE.AmbientLight(0x88aaff, 0.4)
-    this.scene.add(ambient)
-
-    const sun = new THREE.DirectionalLight(0xfff5e6, 1.4)
-    sun.position.set(5, 3, 5)
+    // Lighting — clean sun + dim ambient
+    const sun = new THREE.DirectionalLight(0xfff5e4, 2.0)
+    sun.position.set(5, 2, 5)
     this.scene.add(sun)
 
-    // Subtle rim light from behind
-    const rim = new THREE.DirectionalLight(0x4488ff, 0.3)
-    rim.position.set(-3, -1, -5)
-    this.scene.add(rim)
+    const ambient = new THREE.AmbientLight(0x22222a, 0.12)
+    this.scene.add(ambient)
 
     this.buildGlobe()
+    this.buildClouds()
     this.buildAtmosphere()
     this.buildStarfield()
 
@@ -101,38 +134,68 @@ export class GlobeEngine {
 
   buildGlobe() {
     const loader = new THREE.TextureLoader()
-    const geometry = new THREE.SphereGeometry(1, 96, 96)
-    const material = new THREE.MeshPhongMaterial({
-      map: loader.load('/textures/earth_day.jpg'),
-      bumpMap: loader.load('/textures/earth_bump.jpg'),
-      bumpScale: 0.006,
-      specular: new THREE.Color(0x444466),
-      shininess: 15,
+    const maxAniso = this.renderer.capabilities.getMaxAnisotropy()
+    const dayMap = loader.load('/textures/8k_earth_daymap.jpg')
+    const nightMap = loader.load('/textures/8k_earth_nightmap.jpg')
+    dayMap.anisotropy = maxAniso
+    nightMap.anisotropy = maxAniso
+
+    const geometry = new THREE.SphereGeometry(1, 128, 128)
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        dayMap: { value: dayMap },
+        nightMap: { value: nightMap },
+        sunDirection: { value: new THREE.Vector3(5, 2, 5).normalize() },
+      },
+      vertexShader: DAY_NIGHT_VERT,
+      fragmentShader: DAY_NIGHT_FRAG,
     })
     this.globe = new THREE.Mesh(geometry, material)
     this.scene.add(this.globe)
   }
 
+  buildClouds() {
+    const loader = new THREE.TextureLoader()
+    const maxAniso = this.renderer.capabilities.getMaxAnisotropy()
+    const geo = new THREE.SphereGeometry(1.008, 96, 96)
+    const cloudTex = loader.load('/textures/8k_earth_clouds.jpg')
+    cloudTex.anisotropy = maxAniso
+    const mat = new THREE.MeshStandardMaterial({
+      map: cloudTex,
+      alphaMap: cloudTex,
+      transparent: true,
+      opacity: 0.9,
+      depthWrite: false,
+      roughness: 0.0,
+      metalness: 0.0,
+    })
+    this.clouds = new THREE.Mesh(geo, mat)
+    this.scene.add(this.clouds)
+  }
+
   buildAtmosphere() {
-    // Inner atmosphere — subtle blue fresnel
-    const innerGeo = new THREE.SphereGeometry(1.015, 96, 96)
-    const innerMat = new THREE.ShaderMaterial({
+    // ── 1. Base Earth Atmosphere (subtle natural blue limb) ────────
+    const baseGeo = new THREE.SphereGeometry(1.015, 96, 96)
+    const baseMat = new THREE.ShaderMaterial({
       vertexShader: `
         varying vec3 vNormal;
-        varying vec3 vPosition;
+        varying vec3 vViewPosition;
         void main() {
           vNormal = normalize(normalMatrix * normal);
-          vPosition = (modelViewMatrix * vec4(position, 1.0)).xyz;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
+          vViewPosition = -mvPos.xyz;
+          gl_Position = projectionMatrix * mvPos;
         }
       `,
       fragmentShader: `
         varying vec3 vNormal;
-        varying vec3 vPosition;
+        varying vec3 vViewPosition;
         void main() {
-          float intensity = pow(0.72 - dot(vNormal, vec3(0,0,1.0)), 2.5);
-          vec3 color = mix(vec3(0.15, 0.4, 1.0), vec3(0.4, 0.7, 1.0), intensity);
-          gl_FragColor = vec4(color, intensity * 0.6);
+          vec3 viewDir = normalize(vViewPosition);
+          float fresnel = 1.0 - clamp(dot(vNormal, viewDir), 0.0, 1.0);
+          float intensity = pow(fresnel, 3.5);
+          vec3 blueColor = vec3(0.12, 0.35, 0.65);
+          gl_FragColor = vec4(blueColor * (intensity * 0.18), intensity * 0.18);
         }
       `,
       blending: THREE.AdditiveBlending,
@@ -140,23 +203,104 @@ export class GlobeEngine {
       transparent: true,
       depthWrite: false,
     })
-    this.scene.add(new THREE.Mesh(innerGeo, innerMat))
+    this.baseAtmosphere = new THREE.Mesh(baseGeo, baseMat)
+    this.scene.add(this.baseAtmosphere)
 
-    // Outer atmosphere — glow halo
-    const outerGeo = new THREE.SphereGeometry(1.12, 96, 96)
-    const outerMat = new THREE.ShaderMaterial({
+    // ── 2. Red Translucent Layer ON TOP of the atmosphere (3D Inner Rim) ──
+    const redInnerGeo = new THREE.SphereGeometry(1.02, 96, 96)
+    const redInnerMat = new THREE.ShaderMaterial({
+      uniforms: {
+        sunDirection: { value: new THREE.Vector3(5, 2, 5).normalize() },
+      },
       vertexShader: `
         varying vec3 vNormal;
+        varying vec3 vWorldNormal;
+        varying vec3 vViewPosition;
+        varying vec2 vUv;
         void main() {
+          vUv = uv;
           vNormal = normalize(normalMatrix * normal);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          vWorldNormal = normalize((modelMatrix * vec4(normal, 0.0)).xyz);
+          vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
+          vViewPosition = -mvPos.xyz;
+          gl_Position = projectionMatrix * mvPos;
         }
       `,
       fragmentShader: `
+        uniform vec3 sunDirection;
         varying vec3 vNormal;
+        varying vec3 vWorldNormal;
+        varying vec3 vViewPosition;
+        varying vec2 vUv;
         void main() {
-          float intensity = pow(0.55 - dot(vNormal, vec3(0,0,1.0)), 3.0);
-          gl_FragColor = vec4(0.25, 0.55, 1.0, 1.0) * intensity;
+          vec3 viewDir = normalize(vViewPosition);
+          float fresnel = 1.0 - clamp(dot(vNormal, viewDir), 0.0, 1.0);
+          float intensity = pow(fresnel, 2.8);
+
+          // 3D rotation streamer detail
+          float rotStream = 1.0 + sin(vUv.x * 24.0 + vUv.y * 8.0) * 0.10;
+
+          // Clearly visible translucent light-red rim
+          vec3 lightRed = vec3(1.0, 0.40, 0.46);
+          float alpha = intensity * 0.45;
+          gl_FragColor = vec4(lightRed * (alpha * rotStream), alpha);
+        }
+      `,
+      blending: THREE.AdditiveBlending,
+      side: THREE.FrontSide,
+      transparent: true,
+      depthWrite: false,
+    })
+    this.innerAtmosphere = new THREE.Mesh(redInnerGeo, redInnerMat)
+    this.scene.add(this.innerAtmosphere)
+
+    // ── 3. Red Translucent Layer ON TOP of the atmosphere (3D Outer Shell) ──
+    const redOuterGeo = new THREE.SphereGeometry(1.08, 96, 96)
+    const redOuterMat = new THREE.ShaderMaterial({
+      uniforms: {
+        sunDirection: { value: new THREE.Vector3(5, 2, 5).normalize() },
+      },
+      vertexShader: `
+        varying vec3 vNormal;
+        varying vec3 vWorldNormal;
+        varying vec3 vViewPosition;
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          vNormal = normalize(normalMatrix * normal);
+          vWorldNormal = normalize((modelMatrix * vec4(normal, 0.0)).xyz);
+          vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
+          vViewPosition = -mvPos.xyz;
+          gl_Position = projectionMatrix * mvPos;
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 sunDirection;
+        varying vec3 vNormal;
+        varying vec3 vWorldNormal;
+        varying vec3 vViewPosition;
+        varying vec2 vUv;
+        void main() {
+          vec3 viewDir = normalize(vViewPosition);
+          float viewDot = dot(vNormal, viewDir);
+
+          // Continuous 3D falloff surrounding the globe (clearly visible & translucent)
+          float intensity = pow(clamp(0.68 - viewDot, 0.0, 1.0), 2.5);
+
+          // 3D Sun lighting depth
+          float sunDot = dot(vWorldNormal, normalize(sunDirection));
+          float sunGlow = 1.0 + 0.25 * max(sunDot, 0.0);
+
+          // 3D rotation streamer detail
+          float rotFlow = 1.0 + sin(vUv.x * 24.0 + vUv.y * 8.0) * 0.10;
+
+          // Translucent yet clearly visible light-red glow
+          vec3 lightRed = vec3(1.0, 0.38, 0.45);
+          vec3 warmLuminance = vec3(1.0, 0.52, 0.58);
+          vec3 glowColor = mix(lightRed, warmLuminance, intensity * 0.35);
+
+          float alpha = intensity * 0.65;
+          gl_FragColor = vec4(glowColor * (alpha * sunGlow * rotFlow), alpha);
         }
       `,
       blending: THREE.AdditiveBlending,
@@ -164,52 +308,19 @@ export class GlobeEngine {
       transparent: true,
       depthWrite: false,
     })
-    this.atmosphere = new THREE.Mesh(outerGeo, outerMat)
+    this.atmosphere = new THREE.Mesh(redOuterGeo, redOuterMat)
     this.scene.add(this.atmosphere)
   }
 
   buildStarfield() {
-    const geometry = new THREE.BufferGeometry()
-    const count    = 8000
-    const positions = new Float32Array(count * 3)
-    const sizes     = new Float32Array(count)
-    const colors    = new Float32Array(count * 3)
-
-    for (let i = 0; i < count; i++) {
-      const theta = Math.random() * Math.PI * 2
-      const phi   = Math.acos(2 * Math.random() - 1)
-      const r     = 60 + Math.random() * 140
-
-      positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta)
-      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
-      positions[i * 3 + 2] = r * Math.cos(phi)
-      sizes[i] = Math.random() * 1.8 + 0.2
-
-      // Slight color variation
-      const temp = Math.random()
-      if (temp < 0.15) {
-        colors[i * 3] = 0.7; colors[i * 3 + 1] = 0.8; colors[i * 3 + 2] = 1.0
-      } else if (temp < 0.05) {
-        colors[i * 3] = 1.0; colors[i * 3 + 1] = 0.9; colors[i * 3 + 2] = 0.7
-      } else {
-        colors[i * 3] = 1.0; colors[i * 3 + 1] = 1.0; colors[i * 3 + 2] = 1.0
-      }
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    geometry.setAttribute('size',     new THREE.BufferAttribute(sizes, 1))
-    geometry.setAttribute('color',    new THREE.BufferAttribute(colors, 3))
-
-    const material = new THREE.PointsMaterial({
-      size:        0.12,
-      sizeAttenuation: true,
-      transparent: true,
-      opacity:     0.9,
-      vertexColors: true,
+    const loader = new THREE.TextureLoader()
+    const geo = new THREE.SphereGeometry(400, 64, 64)
+    const mat = new THREE.MeshBasicMaterial({
+      map: loader.load('/textures/8k_stars_milky_way.jpg'),
+      side: THREE.BackSide,
     })
-
-    const stars = new THREE.Points(geometry, material)
-    this.scene.add(stars)
+    this.starSphere = new THREE.Mesh(geo, mat)
+    this.scene.add(this.starSphere)
   }
 
   bindEvents() {
@@ -228,6 +339,10 @@ export class GlobeEngine {
       this.globe.rotation.y += dx
       this.globe.rotation.x += dy
       this.globe.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.globe.rotation.x))
+      if (this.clouds) {
+        this.clouds.rotation.y = this.globe.rotation.y
+        this.clouds.rotation.x = this.globe.rotation.x
+      }
       this._syncLayerRotations()
       this.prevMouse = { x: e.clientX, y: e.clientY }
     })
@@ -265,13 +380,53 @@ export class GlobeEngine {
   }
 
   latLngToVec3(lat, lng, radius = 1.001) {
-    const phi   = (90 - lat) * (Math.PI / 180)
+    const phi = (90 - lat) * (Math.PI / 180)
     const theta = (lng + 180) * (Math.PI / 180)
     return new THREE.Vector3(
       -radius * Math.sin(phi) * Math.cos(theta),
        radius * Math.cos(phi),
        radius * Math.sin(phi) * Math.sin(theta)
     )
+  }
+
+  flyTo(lat, lng, duration = 1200) {
+    if (typeof lat !== 'number' || typeof lng !== 'number') return
+    const targetY = -((lng + 90) * (Math.PI / 180))
+    const targetX = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, (lat * (Math.PI / 180))))
+
+    const startX = this.globe.rotation.x
+    const startY = this.globe.rotation.y
+
+    // Shortest angular distance for Y
+    let diffY = (targetY - (startY % (Math.PI * 2))) % (Math.PI * 2)
+    if (diffY < -Math.PI) diffY += Math.PI * 2
+    if (diffY > Math.PI) diffY -= Math.PI * 2
+    const finalTargetY = startY + diffY
+
+    const startTime = performance.now()
+    this.autoRotate = false
+
+    const animateFly = (now) => {
+      const elapsed = (now - startTime) / duration
+      const t = Math.min(1, Math.max(0, elapsed))
+      // Ease out cubic
+      const ease = 1 - Math.pow(1 - t, 3)
+
+      this.globe.rotation.x = startX + (targetX - startX) * ease
+      this.globe.rotation.y = startY + (finalTargetY - startY) * ease
+      if (this.clouds) {
+        this.clouds.rotation.x = this.globe.rotation.x
+        this.clouds.rotation.y = this.globe.rotation.y
+      }
+      this._syncLayerRotations()
+
+      if (t < 1) {
+        requestAnimationFrame(animateFly)
+      } else {
+        setTimeout(() => { this.autoRotate = true }, 2500)
+      }
+    }
+    requestAnimationFrame(animateFly)
   }
 
   // ── Earthquake markers ────────────────────────────────────────
@@ -344,6 +499,10 @@ export class GlobeEngine {
     })
 
     layer.rotation.copy(this.globe.rotation)
+
+    if (dataPoints.length > 0) {
+      this.flyTo(dataPoints[0].lat, dataPoints[0].lng)
+    }
   }
 
   // ── Population markers — teal pillars ─────────────────────────
@@ -364,11 +523,11 @@ export class GlobeEngine {
       const hue = 0.48 - norm * 0.06
       const sat = 0.85 - norm * 0.2
       const lum = 0.45 + norm * 0.2
-      const color    = new THREE.Color().setHSL(hue, sat, lum)
+      const color = new THREE.Color().setHSL(hue, sat, lum)
       const capColor = new THREE.Color().setHSL(hue, 0.6, 0.85)
 
-      const h   = 0.04 + norm * 0.38
-      const w   = 0.006 + norm * 0.008
+      const h = 0.04 + norm * 0.38
+      const w = 0.006 + norm * 0.008
       const pos = this.latLngToVec3(dp.lat, dp.lng)
       const outward = pos.clone().normalize()
 
@@ -442,10 +601,16 @@ export class GlobeEngine {
   animate() {
     this.animId = requestAnimationFrame(this.animate.bind(this))
     if (this.autoRotate) {
-      this.globe.rotation.y += 0.0005
+      const speed = 0.0005
+      this.globe.rotation.y += speed
       Object.values(this.layerGroups).forEach(g => {
-        g.rotation.y += 0.0005
+        g.rotation.y += speed
       })
+      if (this.clouds) this.clouds.rotation.y += speed * 1.1
+      if (this.baseAtmosphere) this.baseAtmosphere.rotation.copy(this.globe.rotation)
+      if (this.atmosphere) this.atmosphere.rotation.copy(this.globe.rotation)
+      if (this.innerAtmosphere) this.innerAtmosphere.rotation.copy(this.globe.rotation)
+      if (this.starSphere) this.starSphere.rotation.y -= speed * 0.2
     }
     this.renderer.render(this.scene, this.camera)
   }

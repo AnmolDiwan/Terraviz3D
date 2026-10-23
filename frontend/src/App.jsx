@@ -6,47 +6,6 @@ import { geoService } from './services/geo.service.js'
 import { aiService } from './services/ai.service.js'
 import './App.css'
 
-// ── Twinkling stars background ───────────────────────────────
-function Stars() {
-  const layers = [
-    { count: 80, size: [1.5, 2.5], speed: 5 },
-    { count: 140, size: [1, 1.8], speed: 7 },
-    { count: 200, size: [0.5, 1.2], speed: 9 },
-  ]
-
-  return (
-    <div style={{
-      position: 'absolute', inset: 0, overflow: 'hidden',
-      pointerEvents: 'none', zIndex: 0,
-      background: 'radial-gradient(ellipse at 60% 80%, #030710 0%, #000000 100%)',
-    }}>
-      {layers.map((layer, layerIndex) =>
-        Array.from({ length: layer.count }).map((_, i) => {
-          const size = Math.random() * (layer.size[1] - layer.size[0]) + layer.size[0]
-          const colors = ['#ffffff', '#c8deff', '#89b4f0', '#aac4ff']
-          const color = colors[Math.floor(Math.random() * colors.length)]
-          return (
-            <div
-              key={`${layerIndex}-${i}`}
-              style={{
-                position: 'absolute',
-                width: size, height: size,
-                left: Math.random() * 100 + '%',
-                top: Math.random() * 100 + '%',
-                borderRadius: '50%',
-                background: color,
-                boxShadow: `0 0 ${size * 2.5}px ${color}`,
-                opacity: Math.random() * 0.6 + 0.2,
-                animation: `twinkle ${layer.speed + Math.random() * 3}s infinite`,
-                animationDelay: `${Math.random() * 5}s`,
-              }}
-            />
-          )
-        })
-      )}
-    </div>
-  )
-}
 
 // ── Auth Modal ───────────────────────────────────────────────
 function AuthModal({ onClose, login, register }) {
@@ -713,14 +672,11 @@ export default function App() {
   }
 
   return (
-    <>
-      <Stars />
-      <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
-        <Stars />
-        <canvas ref={canvasRef} style={{
-          position: 'absolute', inset: 0,
-          background: 'transparent',
-        }} />
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', background: '#000000' }}>
+      <canvas ref={canvasRef} style={{
+        position: 'absolute', inset: 0,
+        background: 'transparent',
+      }} />
 
         <Sidebar
           user={user} layerOn={layerOn} popLayerOn={popLayerOn} status={status}
@@ -751,6 +707,5 @@ export default function App() {
           />
         )}
       </div>
-    </>
   )
 }

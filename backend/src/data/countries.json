@@ -1,0 +1,3489 @@
+[
+  {
+    "name": {
+      "common": "Afghanistan"
+    },
+    "population": 27657145,
+    "latlng": [
+      33,
+      65
+    ],
+    "capital": [
+      "Kabul"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Åland Islands"
+    },
+    "population": 28875,
+    "latlng": [
+      60.116667,
+      19.9
+    ],
+    "capital": [
+      "Mariehamn"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Albania"
+    },
+    "population": 2886026,
+    "latlng": [
+      41,
+      20
+    ],
+    "capital": [
+      "Tirana"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Algeria"
+    },
+    "population": 40400000,
+    "latlng": [
+      28,
+      3
+    ],
+    "capital": [
+      "Algiers"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "American Samoa"
+    },
+    "population": 57100,
+    "latlng": [
+      -14.33333333,
+      -170
+    ],
+    "capital": [
+      "Pago Pago"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Andorra"
+    },
+    "population": 78014,
+    "latlng": [
+      42.5,
+      1.5
+    ],
+    "capital": [
+      "Andorra la Vella"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Angola"
+    },
+    "population": 25868000,
+    "latlng": [
+      -12.5,
+      18.5
+    ],
+    "capital": [
+      "Luanda"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Anguilla"
+    },
+    "population": 13452,
+    "latlng": [
+      18.25,
+      -63.16666666
+    ],
+    "capital": [
+      "The Valley"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Antarctica"
+    },
+    "population": 1000,
+    "latlng": [
+      -74.65,
+      4.48
+    ],
+    "capital": [],
+    "region": "Polar"
+  },
+  {
+    "name": {
+      "common": "Antigua and Barbuda"
+    },
+    "population": 86295,
+    "latlng": [
+      17.05,
+      -61.8
+    ],
+    "capital": [
+      "Saint John's"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Argentina"
+    },
+    "population": 43590400,
+    "latlng": [
+      -34,
+      -64
+    ],
+    "capital": [
+      "Buenos Aires"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Armenia"
+    },
+    "population": 2994400,
+    "latlng": [
+      40,
+      45
+    ],
+    "capital": [
+      "Yerevan"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Aruba"
+    },
+    "population": 107394,
+    "latlng": [
+      12.5,
+      -69.96666666
+    ],
+    "capital": [
+      "Oranjestad"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Australia"
+    },
+    "population": 24117360,
+    "latlng": [
+      -27,
+      133
+    ],
+    "capital": [
+      "Canberra"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Austria"
+    },
+    "population": 8725931,
+    "latlng": [
+      47.33333333,
+      13.33333333
+    ],
+    "capital": [
+      "Vienna"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Azerbaijan"
+    },
+    "population": 9730500,
+    "latlng": [
+      40.5,
+      47.5
+    ],
+    "capital": [
+      "Baku"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Bahamas"
+    },
+    "population": 378040,
+    "latlng": [
+      24.25,
+      -76
+    ],
+    "capital": [
+      "Nassau"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Bahrain"
+    },
+    "population": 1404900,
+    "latlng": [
+      26,
+      50.55
+    ],
+    "capital": [
+      "Manama"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Bangladesh"
+    },
+    "population": 161006790,
+    "latlng": [
+      24,
+      90
+    ],
+    "capital": [
+      "Dhaka"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Barbados"
+    },
+    "population": 285000,
+    "latlng": [
+      13.16666666,
+      -59.53333333
+    ],
+    "capital": [
+      "Bridgetown"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Belarus"
+    },
+    "population": 9498700,
+    "latlng": [
+      53,
+      28
+    ],
+    "capital": [
+      "Minsk"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Belgium"
+    },
+    "population": 11319511,
+    "latlng": [
+      50.83333333,
+      4
+    ],
+    "capital": [
+      "Brussels"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Belize"
+    },
+    "population": 370300,
+    "latlng": [
+      17.25,
+      -88.75
+    ],
+    "capital": [
+      "Belmopan"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Benin"
+    },
+    "population": 10653654,
+    "latlng": [
+      9.5,
+      2.25
+    ],
+    "capital": [
+      "Porto-Novo"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Bermuda"
+    },
+    "population": 61954,
+    "latlng": [
+      32.33333333,
+      -64.75
+    ],
+    "capital": [
+      "Hamilton"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Bhutan"
+    },
+    "population": 775620,
+    "latlng": [
+      27.5,
+      90.5
+    ],
+    "capital": [
+      "Thimphu"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Bolivia (Plurinational State of)"
+    },
+    "population": 10985059,
+    "latlng": [
+      -17,
+      -65
+    ],
+    "capital": [
+      "Sucre"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Bonaire, Sint Eustatius and Saba"
+    },
+    "population": 17408,
+    "latlng": [
+      12.15,
+      -68.266667
+    ],
+    "capital": [
+      "Kralendijk"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Bosnia and Herzegovina"
+    },
+    "population": 3531159,
+    "latlng": [
+      44,
+      18
+    ],
+    "capital": [
+      "Sarajevo"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Botswana"
+    },
+    "population": 2141206,
+    "latlng": [
+      -22,
+      24
+    ],
+    "capital": [
+      "Gaborone"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Bouvet Island"
+    },
+    "population": 0,
+    "latlng": [
+      -54.43333333,
+      3.4
+    ],
+    "capital": [],
+    "region": ""
+  },
+  {
+    "name": {
+      "common": "Brazil"
+    },
+    "population": 206135893,
+    "latlng": [
+      -10,
+      -55
+    ],
+    "capital": [
+      "Brasília"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "British Indian Ocean Territory"
+    },
+    "population": 3000,
+    "latlng": [
+      -6,
+      71.5
+    ],
+    "capital": [
+      "Diego Garcia"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "United States Minor Outlying Islands"
+    },
+    "population": 300,
+    "latlng": [],
+    "capital": [],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Virgin Islands (British)"
+    },
+    "population": 28514,
+    "latlng": [
+      18.431383,
+      -64.62305
+    ],
+    "capital": [
+      "Road Town"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Virgin Islands (U.S.)"
+    },
+    "population": 114743,
+    "latlng": [
+      18.34,
+      -64.93
+    ],
+    "capital": [
+      "Charlotte Amalie"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Brunei Darussalam"
+    },
+    "population": 411900,
+    "latlng": [
+      4.5,
+      114.66666666
+    ],
+    "capital": [
+      "Bandar Seri Begawan"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Bulgaria"
+    },
+    "population": 7153784,
+    "latlng": [
+      43,
+      25
+    ],
+    "capital": [
+      "Sofia"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Burkina Faso"
+    },
+    "population": 19034397,
+    "latlng": [
+      13,
+      -2
+    ],
+    "capital": [
+      "Ouagadougou"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Burundi"
+    },
+    "population": 10114505,
+    "latlng": [
+      -3.5,
+      30
+    ],
+    "capital": [
+      "Bujumbura"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Cambodia"
+    },
+    "population": 15626444,
+    "latlng": [
+      13,
+      105
+    ],
+    "capital": [
+      "Phnom Penh"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Cameroon"
+    },
+    "population": 22709892,
+    "latlng": [
+      6,
+      12
+    ],
+    "capital": [
+      "Yaoundé"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Canada"
+    },
+    "population": 36155487,
+    "latlng": [
+      60,
+      -95
+    ],
+    "capital": [
+      "Ottawa"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Cabo Verde"
+    },
+    "population": 531239,
+    "latlng": [
+      16,
+      -24
+    ],
+    "capital": [
+      "Praia"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Cayman Islands"
+    },
+    "population": 58238,
+    "latlng": [
+      19.5,
+      -80.5
+    ],
+    "capital": [
+      "George Town"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Central African Republic"
+    },
+    "population": 4998000,
+    "latlng": [
+      7,
+      21
+    ],
+    "capital": [
+      "Bangui"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Chad"
+    },
+    "population": 14497000,
+    "latlng": [
+      15,
+      19
+    ],
+    "capital": [
+      "N'Djamena"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Chile"
+    },
+    "population": 18191900,
+    "latlng": [
+      -30,
+      -71
+    ],
+    "capital": [
+      "Santiago"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "China"
+    },
+    "population": 1377422166,
+    "latlng": [
+      35,
+      105
+    ],
+    "capital": [
+      "Beijing"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Christmas Island"
+    },
+    "population": 2072,
+    "latlng": [
+      -10.5,
+      105.66666666
+    ],
+    "capital": [
+      "Flying Fish Cove"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Cocos (Keeling) Islands"
+    },
+    "population": 550,
+    "latlng": [
+      -12.5,
+      96.83333333
+    ],
+    "capital": [
+      "West Island"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Colombia"
+    },
+    "population": 48759958,
+    "latlng": [
+      4,
+      -72
+    ],
+    "capital": [
+      "Bogotá"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Comoros"
+    },
+    "population": 806153,
+    "latlng": [
+      -12.16666666,
+      44.25
+    ],
+    "capital": [
+      "Moroni"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Congo"
+    },
+    "population": 4741000,
+    "latlng": [
+      -1,
+      15
+    ],
+    "capital": [
+      "Brazzaville"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Congo (Democratic Republic of the)"
+    },
+    "population": 85026000,
+    "latlng": [
+      0,
+      25
+    ],
+    "capital": [
+      "Kinshasa"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Cook Islands"
+    },
+    "population": 18100,
+    "latlng": [
+      -21.23333333,
+      -159.76666666
+    ],
+    "capital": [
+      "Avarua"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Costa Rica"
+    },
+    "population": 4890379,
+    "latlng": [
+      10,
+      -84
+    ],
+    "capital": [
+      "San José"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Croatia"
+    },
+    "population": 4190669,
+    "latlng": [
+      45.16666666,
+      15.5
+    ],
+    "capital": [
+      "Zagreb"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Cuba"
+    },
+    "population": 11239004,
+    "latlng": [
+      21.5,
+      -80
+    ],
+    "capital": [
+      "Havana"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Curaçao"
+    },
+    "population": 154843,
+    "latlng": [
+      12.116667,
+      -68.933333
+    ],
+    "capital": [
+      "Willemstad"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Cyprus"
+    },
+    "population": 847000,
+    "latlng": [
+      35,
+      33
+    ],
+    "capital": [
+      "Nicosia"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Czech Republic"
+    },
+    "population": 10558524,
+    "latlng": [
+      49.75,
+      15.5
+    ],
+    "capital": [
+      "Prague"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Denmark"
+    },
+    "population": 5717014,
+    "latlng": [
+      56,
+      10
+    ],
+    "capital": [
+      "Copenhagen"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Djibouti"
+    },
+    "population": 900000,
+    "latlng": [
+      11.5,
+      43
+    ],
+    "capital": [
+      "Djibouti"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Dominica"
+    },
+    "population": 71293,
+    "latlng": [
+      15.41666666,
+      -61.33333333
+    ],
+    "capital": [
+      "Roseau"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Dominican Republic"
+    },
+    "population": 10075045,
+    "latlng": [
+      19,
+      -70.66666666
+    ],
+    "capital": [
+      "Santo Domingo"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Ecuador"
+    },
+    "population": 16545799,
+    "latlng": [
+      -2,
+      -77.5
+    ],
+    "capital": [
+      "Quito"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Egypt"
+    },
+    "population": 91290000,
+    "latlng": [
+      27,
+      30
+    ],
+    "capital": [
+      "Cairo"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "El Salvador"
+    },
+    "population": 6520675,
+    "latlng": [
+      13.83333333,
+      -88.91666666
+    ],
+    "capital": [
+      "San Salvador"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Equatorial Guinea"
+    },
+    "population": 1222442,
+    "latlng": [
+      2,
+      10
+    ],
+    "capital": [
+      "Malabo"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Eritrea"
+    },
+    "population": 5352000,
+    "latlng": [
+      15,
+      39
+    ],
+    "capital": [
+      "Asmara"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Estonia"
+    },
+    "population": 1315944,
+    "latlng": [
+      59,
+      26
+    ],
+    "capital": [
+      "Tallinn"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Ethiopia"
+    },
+    "population": 92206005,
+    "latlng": [
+      8,
+      38
+    ],
+    "capital": [
+      "Addis Ababa"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Falkland Islands (Malvinas)"
+    },
+    "population": 2563,
+    "latlng": [
+      -51.75,
+      -59
+    ],
+    "capital": [
+      "Stanley"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Faroe Islands"
+    },
+    "population": 49376,
+    "latlng": [
+      62,
+      -7
+    ],
+    "capital": [
+      "Tórshavn"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Fiji"
+    },
+    "population": 867000,
+    "latlng": [
+      -18,
+      175
+    ],
+    "capital": [
+      "Suva"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Finland"
+    },
+    "population": 5491817,
+    "latlng": [
+      64,
+      26
+    ],
+    "capital": [
+      "Helsinki"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "France"
+    },
+    "population": 66710000,
+    "latlng": [
+      46,
+      2
+    ],
+    "capital": [
+      "Paris"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "French Guiana"
+    },
+    "population": 254541,
+    "latlng": [
+      4,
+      -53
+    ],
+    "capital": [
+      "Cayenne"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "French Polynesia"
+    },
+    "population": 271800,
+    "latlng": [
+      -15,
+      -140
+    ],
+    "capital": [
+      "Papeetē"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "French Southern Territories"
+    },
+    "population": 140,
+    "latlng": [
+      -49.25,
+      69.167
+    ],
+    "capital": [
+      "Port-aux-Français"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Gabon"
+    },
+    "population": 1802278,
+    "latlng": [
+      -1,
+      11.75
+    ],
+    "capital": [
+      "Libreville"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Gambia"
+    },
+    "population": 1882450,
+    "latlng": [
+      13.46666666,
+      -16.56666666
+    ],
+    "capital": [
+      "Banjul"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Georgia"
+    },
+    "population": 3720400,
+    "latlng": [
+      42,
+      43.5
+    ],
+    "capital": [
+      "Tbilisi"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Germany"
+    },
+    "population": 81770900,
+    "latlng": [
+      51,
+      9
+    ],
+    "capital": [
+      "Berlin"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Ghana"
+    },
+    "population": 27670174,
+    "latlng": [
+      8,
+      -2
+    ],
+    "capital": [
+      "Accra"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Gibraltar"
+    },
+    "population": 33140,
+    "latlng": [
+      36.13333333,
+      -5.35
+    ],
+    "capital": [
+      "Gibraltar"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Greece"
+    },
+    "population": 10858018,
+    "latlng": [
+      39,
+      22
+    ],
+    "capital": [
+      "Athens"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Greenland"
+    },
+    "population": 55847,
+    "latlng": [
+      72,
+      -40
+    ],
+    "capital": [
+      "Nuuk"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Grenada"
+    },
+    "population": 103328,
+    "latlng": [
+      12.11666666,
+      -61.66666666
+    ],
+    "capital": [
+      "St. George's"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Guadeloupe"
+    },
+    "population": 400132,
+    "latlng": [
+      16.25,
+      -61.583333
+    ],
+    "capital": [
+      "Basse-Terre"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Guam"
+    },
+    "population": 184200,
+    "latlng": [
+      13.46666666,
+      144.78333333
+    ],
+    "capital": [
+      "Hagåtña"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Guatemala"
+    },
+    "population": 16176133,
+    "latlng": [
+      15.5,
+      -90.25
+    ],
+    "capital": [
+      "Guatemala City"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Guernsey"
+    },
+    "population": 62999,
+    "latlng": [
+      49.46666666,
+      -2.58333333
+    ],
+    "capital": [
+      "St. Peter Port"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Guinea"
+    },
+    "population": 12947000,
+    "latlng": [
+      11,
+      -10
+    ],
+    "capital": [
+      "Conakry"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Guinea-Bissau"
+    },
+    "population": 1547777,
+    "latlng": [
+      12,
+      -15
+    ],
+    "capital": [
+      "Bissau"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Guyana"
+    },
+    "population": 746900,
+    "latlng": [
+      5,
+      -59
+    ],
+    "capital": [
+      "Georgetown"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Haiti"
+    },
+    "population": 11078033,
+    "latlng": [
+      19,
+      -72.41666666
+    ],
+    "capital": [
+      "Port-au-Prince"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Heard Island and McDonald Islands"
+    },
+    "population": 0,
+    "latlng": [
+      -53.1,
+      72.51666666
+    ],
+    "capital": [],
+    "region": ""
+  },
+  {
+    "name": {
+      "common": "Holy See"
+    },
+    "population": 451,
+    "latlng": [
+      41.9,
+      12.45
+    ],
+    "capital": [
+      "Rome"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Honduras"
+    },
+    "population": 8576532,
+    "latlng": [
+      15,
+      -86.5
+    ],
+    "capital": [
+      "Tegucigalpa"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Hong Kong"
+    },
+    "population": 7324300,
+    "latlng": [
+      22.25,
+      114.16666666
+    ],
+    "capital": [
+      "City of Victoria"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Hungary"
+    },
+    "population": 9823000,
+    "latlng": [
+      47,
+      20
+    ],
+    "capital": [
+      "Budapest"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Iceland"
+    },
+    "population": 334300,
+    "latlng": [
+      65,
+      -18
+    ],
+    "capital": [
+      "Reykjavík"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "India"
+    },
+    "population": 1295210000,
+    "latlng": [
+      20,
+      77
+    ],
+    "capital": [
+      "New Delhi"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Indonesia"
+    },
+    "population": 258705000,
+    "latlng": [
+      -5,
+      120
+    ],
+    "capital": [
+      "Jakarta"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Côte d'Ivoire"
+    },
+    "population": 22671331,
+    "latlng": [
+      8,
+      -5
+    ],
+    "capital": [
+      "Yamoussoukro"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Iran (Islamic Republic of)"
+    },
+    "population": 79369900,
+    "latlng": [
+      32,
+      53
+    ],
+    "capital": [
+      "Tehran"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Iraq"
+    },
+    "population": 37883543,
+    "latlng": [
+      33,
+      44
+    ],
+    "capital": [
+      "Baghdad"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Ireland"
+    },
+    "population": 6378000,
+    "latlng": [
+      53,
+      -8
+    ],
+    "capital": [
+      "Dublin"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Isle of Man"
+    },
+    "population": 84497,
+    "latlng": [
+      54.25,
+      -4.5
+    ],
+    "capital": [
+      "Douglas"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Israel"
+    },
+    "population": 8527400,
+    "latlng": [
+      31.5,
+      34.75
+    ],
+    "capital": [
+      "Jerusalem"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Italy"
+    },
+    "population": 60665551,
+    "latlng": [
+      42.83333333,
+      12.83333333
+    ],
+    "capital": [
+      "Rome"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Jamaica"
+    },
+    "population": 2723246,
+    "latlng": [
+      18.25,
+      -77.5
+    ],
+    "capital": [
+      "Kingston"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Japan"
+    },
+    "population": 126960000,
+    "latlng": [
+      36,
+      138
+    ],
+    "capital": [
+      "Tokyo"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Jersey"
+    },
+    "population": 100800,
+    "latlng": [
+      49.25,
+      -2.16666666
+    ],
+    "capital": [
+      "Saint Helier"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Jordan"
+    },
+    "population": 9531712,
+    "latlng": [
+      31,
+      36
+    ],
+    "capital": [
+      "Amman"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Kazakhstan"
+    },
+    "population": 17753200,
+    "latlng": [
+      48,
+      68
+    ],
+    "capital": [
+      "Astana"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Kenya"
+    },
+    "population": 47251000,
+    "latlng": [
+      1,
+      38
+    ],
+    "capital": [
+      "Nairobi"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Kiribati"
+    },
+    "population": 113400,
+    "latlng": [
+      1.41666666,
+      173
+    ],
+    "capital": [
+      "South Tarawa"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Kuwait"
+    },
+    "population": 4183658,
+    "latlng": [
+      29.5,
+      45.75
+    ],
+    "capital": [
+      "Kuwait City"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Kyrgyzstan"
+    },
+    "population": 6047800,
+    "latlng": [
+      41,
+      75
+    ],
+    "capital": [
+      "Bishkek"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Lao People's Democratic Republic"
+    },
+    "population": 6492400,
+    "latlng": [
+      18,
+      105
+    ],
+    "capital": [
+      "Vientiane"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Latvia"
+    },
+    "population": 1961600,
+    "latlng": [
+      57,
+      25
+    ],
+    "capital": [
+      "Riga"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Lebanon"
+    },
+    "population": 5988000,
+    "latlng": [
+      33.83333333,
+      35.83333333
+    ],
+    "capital": [
+      "Beirut"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Lesotho"
+    },
+    "population": 1894194,
+    "latlng": [
+      -29.5,
+      28.5
+    ],
+    "capital": [
+      "Maseru"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Liberia"
+    },
+    "population": 4615000,
+    "latlng": [
+      6.5,
+      -9.5
+    ],
+    "capital": [
+      "Monrovia"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Libya"
+    },
+    "population": 6385000,
+    "latlng": [
+      25,
+      17
+    ],
+    "capital": [
+      "Tripoli"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Liechtenstein"
+    },
+    "population": 37623,
+    "latlng": [
+      47.26666666,
+      9.53333333
+    ],
+    "capital": [
+      "Vaduz"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Lithuania"
+    },
+    "population": 2872294,
+    "latlng": [
+      56,
+      24
+    ],
+    "capital": [
+      "Vilnius"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Luxembourg"
+    },
+    "population": 576200,
+    "latlng": [
+      49.75,
+      6.16666666
+    ],
+    "capital": [
+      "Luxembourg"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Macao"
+    },
+    "population": 649100,
+    "latlng": [
+      22.16666666,
+      113.55
+    ],
+    "capital": [],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Macedonia (the former Yugoslav Republic of)"
+    },
+    "population": 2058539,
+    "latlng": [
+      41.83333333,
+      22
+    ],
+    "capital": [
+      "Skopje"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Madagascar"
+    },
+    "population": 22434363,
+    "latlng": [
+      -20,
+      47
+    ],
+    "capital": [
+      "Antananarivo"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Malawi"
+    },
+    "population": 16832910,
+    "latlng": [
+      -13.5,
+      34
+    ],
+    "capital": [
+      "Lilongwe"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Malaysia"
+    },
+    "population": 31405416,
+    "latlng": [
+      2.5,
+      112.5
+    ],
+    "capital": [
+      "Kuala Lumpur"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Maldives"
+    },
+    "population": 344023,
+    "latlng": [
+      3.25,
+      73
+    ],
+    "capital": [
+      "Malé"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Mali"
+    },
+    "population": 18135000,
+    "latlng": [
+      17,
+      -4
+    ],
+    "capital": [
+      "Bamako"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Malta"
+    },
+    "population": 425384,
+    "latlng": [
+      35.83333333,
+      14.58333333
+    ],
+    "capital": [
+      "Valletta"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Marshall Islands"
+    },
+    "population": 54880,
+    "latlng": [
+      9,
+      168
+    ],
+    "capital": [
+      "Majuro"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Martinique"
+    },
+    "population": 378243,
+    "latlng": [
+      14.666667,
+      -61
+    ],
+    "capital": [
+      "Fort-de-France"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Mauritania"
+    },
+    "population": 3718678,
+    "latlng": [
+      20,
+      -12
+    ],
+    "capital": [
+      "Nouakchott"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Mauritius"
+    },
+    "population": 1262879,
+    "latlng": [
+      -20.28333333,
+      57.55
+    ],
+    "capital": [
+      "Port Louis"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Mayotte"
+    },
+    "population": 226915,
+    "latlng": [
+      -12.83333333,
+      45.16666666
+    ],
+    "capital": [
+      "Mamoudzou"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Mexico"
+    },
+    "population": 122273473,
+    "latlng": [
+      23,
+      -102
+    ],
+    "capital": [
+      "Mexico City"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Micronesia (Federated States of)"
+    },
+    "population": 102800,
+    "latlng": [
+      6.91666666,
+      158.25
+    ],
+    "capital": [
+      "Palikir"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Moldova (Republic of)"
+    },
+    "population": 3553100,
+    "latlng": [
+      47,
+      29
+    ],
+    "capital": [
+      "Chișinău"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Monaco"
+    },
+    "population": 38400,
+    "latlng": [
+      43.73333333,
+      7.4
+    ],
+    "capital": [
+      "Monaco"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Mongolia"
+    },
+    "population": 3093100,
+    "latlng": [
+      46,
+      105
+    ],
+    "capital": [
+      "Ulan Bator"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Montenegro"
+    },
+    "population": 621810,
+    "latlng": [
+      42.5,
+      19.3
+    ],
+    "capital": [
+      "Podgorica"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Montserrat"
+    },
+    "population": 4922,
+    "latlng": [
+      16.75,
+      -62.2
+    ],
+    "capital": [
+      "Plymouth"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Morocco"
+    },
+    "population": 33337529,
+    "latlng": [
+      32,
+      -5
+    ],
+    "capital": [
+      "Rabat"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Mozambique"
+    },
+    "population": 26423700,
+    "latlng": [
+      -18.25,
+      35
+    ],
+    "capital": [
+      "Maputo"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Myanmar"
+    },
+    "population": 51419420,
+    "latlng": [
+      22,
+      98
+    ],
+    "capital": [
+      "Naypyidaw"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Namibia"
+    },
+    "population": 2324388,
+    "latlng": [
+      -22,
+      17
+    ],
+    "capital": [
+      "Windhoek"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Nauru"
+    },
+    "population": 10084,
+    "latlng": [
+      -0.53333333,
+      166.91666666
+    ],
+    "capital": [
+      "Yaren"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Nepal"
+    },
+    "population": 28431500,
+    "latlng": [
+      28,
+      84
+    ],
+    "capital": [
+      "Kathmandu"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Netherlands"
+    },
+    "population": 17019800,
+    "latlng": [
+      52.5,
+      5.75
+    ],
+    "capital": [
+      "Amsterdam"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "New Caledonia"
+    },
+    "population": 268767,
+    "latlng": [
+      -21.5,
+      165.5
+    ],
+    "capital": [
+      "Nouméa"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "New Zealand"
+    },
+    "population": 4697854,
+    "latlng": [
+      -41,
+      174
+    ],
+    "capital": [
+      "Wellington"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Nicaragua"
+    },
+    "population": 6262703,
+    "latlng": [
+      13,
+      -85
+    ],
+    "capital": [
+      "Managua"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Niger"
+    },
+    "population": 20715000,
+    "latlng": [
+      16,
+      8
+    ],
+    "capital": [
+      "Niamey"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Nigeria"
+    },
+    "population": 186988000,
+    "latlng": [
+      10,
+      8
+    ],
+    "capital": [
+      "Abuja"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Niue"
+    },
+    "population": 1470,
+    "latlng": [
+      -19.03333333,
+      -169.86666666
+    ],
+    "capital": [
+      "Alofi"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Norfolk Island"
+    },
+    "population": 2302,
+    "latlng": [
+      -29.03333333,
+      167.95
+    ],
+    "capital": [
+      "Kingston"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Korea (Democratic People's Republic of)"
+    },
+    "population": 25281000,
+    "latlng": [
+      40,
+      127
+    ],
+    "capital": [
+      "Pyongyang"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Northern Mariana Islands"
+    },
+    "population": 56940,
+    "latlng": [
+      15.2,
+      145.75
+    ],
+    "capital": [
+      "Saipan"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Norway"
+    },
+    "population": 5223256,
+    "latlng": [
+      62,
+      10
+    ],
+    "capital": [
+      "Oslo"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Oman"
+    },
+    "population": 4420133,
+    "latlng": [
+      21,
+      57
+    ],
+    "capital": [
+      "Muscat"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Pakistan"
+    },
+    "population": 194125062,
+    "latlng": [
+      30,
+      70
+    ],
+    "capital": [
+      "Islamabad"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Palau"
+    },
+    "population": 17950,
+    "latlng": [
+      7.5,
+      134.5
+    ],
+    "capital": [
+      "Ngerulmud"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Palestine, State of"
+    },
+    "population": 4682467,
+    "latlng": [
+      31.9,
+      35.2
+    ],
+    "capital": [
+      "Ramallah"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Panama"
+    },
+    "population": 3814672,
+    "latlng": [
+      9,
+      -80
+    ],
+    "capital": [
+      "Panama City"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Papua New Guinea"
+    },
+    "population": 8083700,
+    "latlng": [
+      -6,
+      147
+    ],
+    "capital": [
+      "Port Moresby"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Paraguay"
+    },
+    "population": 6854536,
+    "latlng": [
+      -23,
+      -58
+    ],
+    "capital": [
+      "Asunción"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Peru"
+    },
+    "population": 31488700,
+    "latlng": [
+      -10,
+      -76
+    ],
+    "capital": [
+      "Lima"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Philippines"
+    },
+    "population": 103279800,
+    "latlng": [
+      13,
+      122
+    ],
+    "capital": [
+      "Manila"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Pitcairn"
+    },
+    "population": 56,
+    "latlng": [
+      -25.06666666,
+      -130.1
+    ],
+    "capital": [
+      "Adamstown"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Poland"
+    },
+    "population": 38437239,
+    "latlng": [
+      52,
+      20
+    ],
+    "capital": [
+      "Warsaw"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Portugal"
+    },
+    "population": 10374822,
+    "latlng": [
+      39.5,
+      -8
+    ],
+    "capital": [
+      "Lisbon"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Puerto Rico"
+    },
+    "population": 3474182,
+    "latlng": [
+      18.25,
+      -66.5
+    ],
+    "capital": [
+      "San Juan"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Qatar"
+    },
+    "population": 2587564,
+    "latlng": [
+      25.5,
+      51.25
+    ],
+    "capital": [
+      "Doha"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Republic of Kosovo"
+    },
+    "population": 1733842,
+    "latlng": [
+      42.666667,
+      21.166667
+    ],
+    "capital": [
+      "Pristina"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Réunion"
+    },
+    "population": 840974,
+    "latlng": [
+      -21.15,
+      55.5
+    ],
+    "capital": [
+      "Saint-Denis"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Romania"
+    },
+    "population": 19861408,
+    "latlng": [
+      46,
+      25
+    ],
+    "capital": [
+      "Bucharest"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Russian Federation"
+    },
+    "population": 146599183,
+    "latlng": [
+      60,
+      100
+    ],
+    "capital": [
+      "Moscow"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Rwanda"
+    },
+    "population": 11553188,
+    "latlng": [
+      -2,
+      30
+    ],
+    "capital": [
+      "Kigali"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Saint Barthélemy"
+    },
+    "population": 9417,
+    "latlng": [
+      18.5,
+      -63.41666666
+    ],
+    "capital": [
+      "Gustavia"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Saint Helena, Ascension and Tristan da Cunha"
+    },
+    "population": 4255,
+    "latlng": [
+      -15.95,
+      -5.7
+    ],
+    "capital": [
+      "Jamestown"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Saint Kitts and Nevis"
+    },
+    "population": 46204,
+    "latlng": [
+      17.33333333,
+      -62.75
+    ],
+    "capital": [
+      "Basseterre"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Saint Lucia"
+    },
+    "population": 186000,
+    "latlng": [
+      13.88333333,
+      -60.96666666
+    ],
+    "capital": [
+      "Castries"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Saint Martin (French part)"
+    },
+    "population": 36979,
+    "latlng": [
+      18.08333333,
+      -63.95
+    ],
+    "capital": [
+      "Marigot"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Saint Pierre and Miquelon"
+    },
+    "population": 6069,
+    "latlng": [
+      46.83333333,
+      -56.33333333
+    ],
+    "capital": [
+      "Saint-Pierre"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Saint Vincent and the Grenadines"
+    },
+    "population": 109991,
+    "latlng": [
+      13.25,
+      -61.2
+    ],
+    "capital": [
+      "Kingstown"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Samoa"
+    },
+    "population": 194899,
+    "latlng": [
+      -13.58333333,
+      -172.33333333
+    ],
+    "capital": [
+      "Apia"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "San Marino"
+    },
+    "population": 33005,
+    "latlng": [
+      43.76666666,
+      12.41666666
+    ],
+    "capital": [
+      "City of San Marino"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Sao Tome and Principe"
+    },
+    "population": 187356,
+    "latlng": [
+      1,
+      7
+    ],
+    "capital": [
+      "São Tomé"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Saudi Arabia"
+    },
+    "population": 32248200,
+    "latlng": [
+      25,
+      45
+    ],
+    "capital": [
+      "Riyadh"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Senegal"
+    },
+    "population": 14799859,
+    "latlng": [
+      14,
+      -14
+    ],
+    "capital": [
+      "Dakar"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Serbia"
+    },
+    "population": 7076372,
+    "latlng": [
+      44,
+      21
+    ],
+    "capital": [
+      "Belgrade"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Seychelles"
+    },
+    "population": 91400,
+    "latlng": [
+      -4.58333333,
+      55.66666666
+    ],
+    "capital": [
+      "Victoria"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Sierra Leone"
+    },
+    "population": 7075641,
+    "latlng": [
+      8.5,
+      -11.5
+    ],
+    "capital": [
+      "Freetown"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Singapore"
+    },
+    "population": 5535000,
+    "latlng": [
+      1.36666666,
+      103.8
+    ],
+    "capital": [
+      "Singapore"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Sint Maarten (Dutch part)"
+    },
+    "population": 38247,
+    "latlng": [
+      18.033333,
+      -63.05
+    ],
+    "capital": [
+      "Philipsburg"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Slovakia"
+    },
+    "population": 5426252,
+    "latlng": [
+      48.66666666,
+      19.5
+    ],
+    "capital": [
+      "Bratislava"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Slovenia"
+    },
+    "population": 2064188,
+    "latlng": [
+      46.11666666,
+      14.81666666
+    ],
+    "capital": [
+      "Ljubljana"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Solomon Islands"
+    },
+    "population": 642000,
+    "latlng": [
+      -8,
+      159
+    ],
+    "capital": [
+      "Honiara"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Somalia"
+    },
+    "population": 11079000,
+    "latlng": [
+      10,
+      49
+    ],
+    "capital": [
+      "Mogadishu"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "South Africa"
+    },
+    "population": 55653654,
+    "latlng": [
+      -29,
+      24
+    ],
+    "capital": [
+      "Pretoria"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "South Georgia and the South Sandwich Islands"
+    },
+    "population": 30,
+    "latlng": [
+      -54.5,
+      -37
+    ],
+    "capital": [
+      "King Edward Point"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Korea (Republic of)"
+    },
+    "population": 50801405,
+    "latlng": [
+      37,
+      127.5
+    ],
+    "capital": [
+      "Seoul"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "South Sudan"
+    },
+    "population": 12131000,
+    "latlng": [
+      7,
+      30
+    ],
+    "capital": [
+      "Juba"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Spain"
+    },
+    "population": 46438422,
+    "latlng": [
+      40,
+      -4
+    ],
+    "capital": [
+      "Madrid"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Sri Lanka"
+    },
+    "population": 20966000,
+    "latlng": [
+      7,
+      81
+    ],
+    "capital": [
+      "Colombo"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Sudan"
+    },
+    "population": 39598700,
+    "latlng": [
+      15,
+      30
+    ],
+    "capital": [
+      "Khartoum"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Suriname"
+    },
+    "population": 541638,
+    "latlng": [
+      4,
+      -56
+    ],
+    "capital": [
+      "Paramaribo"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Svalbard and Jan Mayen"
+    },
+    "population": 2562,
+    "latlng": [
+      78,
+      20
+    ],
+    "capital": [
+      "Longyearbyen"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Swaziland"
+    },
+    "population": 1132657,
+    "latlng": [
+      -26.5,
+      31.5
+    ],
+    "capital": [
+      "Lobamba"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Sweden"
+    },
+    "population": 9894888,
+    "latlng": [
+      62,
+      15
+    ],
+    "capital": [
+      "Stockholm"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Switzerland"
+    },
+    "population": 8341600,
+    "latlng": [
+      47,
+      8
+    ],
+    "capital": [
+      "Bern"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "Syrian Arab Republic"
+    },
+    "population": 18564000,
+    "latlng": [
+      35,
+      38
+    ],
+    "capital": [
+      "Damascus"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Taiwan"
+    },
+    "population": 23503349,
+    "latlng": [
+      23.5,
+      121
+    ],
+    "capital": [
+      "Taipei"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Tajikistan"
+    },
+    "population": 8593600,
+    "latlng": [
+      39,
+      71
+    ],
+    "capital": [
+      "Dushanbe"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Tanzania, United Republic of"
+    },
+    "population": 55155000,
+    "latlng": [
+      -6,
+      35
+    ],
+    "capital": [
+      "Dodoma"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Thailand"
+    },
+    "population": 65327652,
+    "latlng": [
+      15,
+      100
+    ],
+    "capital": [
+      "Bangkok"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Timor-Leste"
+    },
+    "population": 1167242,
+    "latlng": [
+      -8.83333333,
+      125.91666666
+    ],
+    "capital": [
+      "Dili"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Togo"
+    },
+    "population": 7143000,
+    "latlng": [
+      8,
+      1.16666666
+    ],
+    "capital": [
+      "Lomé"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Tokelau"
+    },
+    "population": 1411,
+    "latlng": [
+      -9,
+      -172
+    ],
+    "capital": [
+      "Fakaofo"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Tonga"
+    },
+    "population": 103252,
+    "latlng": [
+      -20,
+      -175
+    ],
+    "capital": [
+      "Nuku'alofa"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Trinidad and Tobago"
+    },
+    "population": 1349667,
+    "latlng": [
+      11,
+      -61
+    ],
+    "capital": [
+      "Port of Spain"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Tunisia"
+    },
+    "population": 11154400,
+    "latlng": [
+      34,
+      9
+    ],
+    "capital": [
+      "Tunis"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Turkey"
+    },
+    "population": 78741053,
+    "latlng": [
+      39,
+      35
+    ],
+    "capital": [
+      "Ankara"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Turkmenistan"
+    },
+    "population": 4751120,
+    "latlng": [
+      40,
+      60
+    ],
+    "capital": [
+      "Ashgabat"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Turks and Caicos Islands"
+    },
+    "population": 31458,
+    "latlng": [
+      21.75,
+      -71.58333333
+    ],
+    "capital": [
+      "Cockburn Town"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Tuvalu"
+    },
+    "population": 10640,
+    "latlng": [
+      -8,
+      178
+    ],
+    "capital": [
+      "Funafuti"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Uganda"
+    },
+    "population": 33860700,
+    "latlng": [
+      1,
+      32
+    ],
+    "capital": [
+      "Kampala"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Ukraine"
+    },
+    "population": 42692393,
+    "latlng": [
+      49,
+      32
+    ],
+    "capital": [
+      "Kiev"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "United Arab Emirates"
+    },
+    "population": 9856000,
+    "latlng": [
+      24,
+      54
+    ],
+    "capital": [
+      "Abu Dhabi"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "United Kingdom of Great Britain and Northern Ireland"
+    },
+    "population": 65110000,
+    "latlng": [
+      54,
+      -2
+    ],
+    "capital": [
+      "London"
+    ],
+    "region": "Europe"
+  },
+  {
+    "name": {
+      "common": "United States of America"
+    },
+    "population": 323947000,
+    "latlng": [
+      38,
+      -97
+    ],
+    "capital": [
+      "Washington, D.C."
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Uruguay"
+    },
+    "population": 3480222,
+    "latlng": [
+      -33,
+      -56
+    ],
+    "capital": [
+      "Montevideo"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Uzbekistan"
+    },
+    "population": 31576400,
+    "latlng": [
+      41,
+      64
+    ],
+    "capital": [
+      "Tashkent"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Vanuatu"
+    },
+    "population": 277500,
+    "latlng": [
+      -16,
+      167
+    ],
+    "capital": [
+      "Port Vila"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Venezuela (Bolivarian Republic of)"
+    },
+    "population": 31028700,
+    "latlng": [
+      8,
+      -66
+    ],
+    "capital": [
+      "Caracas"
+    ],
+    "region": "Americas"
+  },
+  {
+    "name": {
+      "common": "Viet Nam"
+    },
+    "population": 92700000,
+    "latlng": [
+      16.16666666,
+      107.83333333
+    ],
+    "capital": [
+      "Hanoi"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Wallis and Futuna"
+    },
+    "population": 11750,
+    "latlng": [
+      -13.3,
+      -176.2
+    ],
+    "capital": [
+      "Mata-Utu"
+    ],
+    "region": "Oceania"
+  },
+  {
+    "name": {
+      "common": "Western Sahara"
+    },
+    "population": 510713,
+    "latlng": [
+      24.5,
+      -13
+    ],
+    "capital": [
+      "El Aaiún"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Yemen"
+    },
+    "population": 27478000,
+    "latlng": [
+      15,
+      48
+    ],
+    "capital": [
+      "Sana'a"
+    ],
+    "region": "Asia"
+  },
+  {
+    "name": {
+      "common": "Zambia"
+    },
+    "population": 15933883,
+    "latlng": [
+      -15,
+      30
+    ],
+    "capital": [
+      "Lusaka"
+    ],
+    "region": "Africa"
+  },
+  {
+    "name": {
+      "common": "Zimbabwe"
+    },
+    "population": 14240168,
+    "latlng": [
+      -20,
+      30
+    ],
+    "capital": [
+      "Harare"
+    ],
+    "region": "Africa"
+  }
+]
