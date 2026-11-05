@@ -1,246 +1,136 @@
 # TerraViz 3D — Geospatial Intelligence Platform
 
-TerraViz 3D is a full-stack, cloud-native geospatial intelligence platform deployed on Amazon Web Services (AWS) and served globally through Cloudflare. The platform renders an interactive, hardware-accelerated 3D globe in the browser, visualizes real-time global seismic feeds and demographic data, and features a specialized Graph-RAG AI assistant that interprets geospatial activity and guides user exploration.
+TerraViz 3D is a full-stack, cloud-native geospatial intelligence platform deployed on Amazon Web Services (AWS) and served globally through Cloudflare. The platform renders a hardware-accelerated 3D globe in the browser, visualizes real-time seismic feeds and demographic data, and features a specialized Graph-RAG AI assistant that interprets geospatial activity and guides user exploration.
 
-The infrastructure is fully automated using Terraform (Infrastructure as Code) following multi-tier, zero-trust cloud architecture principles.
+The infrastructure is automated using Terraform (Infrastructure as Code) following multi-tier, zero-trust cloud architecture principles across two AWS Availability Zones.
 
-- **Live URL:** https://terraviz.anmolcloud.in
+- **Production URL:** https://terraviz.anmolcloud.in
 - **Cloud Provider:** Amazon Web Services (AWS)
 - **Deployment Region:** us-east-1 (High Availability across 2 Availability Zones)
-- **Edge Routing & CDN:** Cloudflare
+- **Edge Routing & Security:** Cloudflare
 
 ---
 
-## Architecture Diagram
+## Cloud Architecture
 
+```mermaid
+flowchart TD
+    subgraph Edge["Edge Layer (Cloudflare)"]
+        CF["Cloudflare DNS & CDN<br/>Full (Strict) TLS 1.3 Termination<br/>DDoS Mitigation & Edge Caching"]
+    end
+
+    subgraph AWS["AWS Cloud (us-east-1)"]
+        subgraph Security["Perimeter Security"]
+            WAF["AWS WAFv2 WebACL<br/>• CommonRuleSet (OWASP Top 10)<br/>• SQLiRuleSet<br/>• KnownBadInputsRuleSet<br/>• IP & /api/ai Rate Limits"]
+        end
+
+        subgraph VPC["Virtual Private Cloud (10.0.0.0/16)"]
+            subgraph PublicSubnets["Public Subnets (us-east-1a, us-east-1b)"]
+                ALB["Application Load Balancer<br/>terraviz3d-production-alb"]
+                NAT["NAT Gateway (Subnet A)<br/>Egress for Private Tasks"]
+            end
+
+            subgraph AppTier["Private Application Subnets (Dual-AZ)"]
+                Fargate1["ECS Fargate Task 1<br/>(On-Demand Base)"]
+                Fargate2["ECS Fargate Task 2<br/>(Spot Provider)"]
+            end
+
+            subgraph DataTier["Private Data Subnets (Dual-AZ)"]
+                RDS[("Amazon RDS PostgreSQL 15<br/>db.t4g.micro (KMS Encrypted)<br/>Forced TLS 1.2+")]
+                Redis[("Amazon ElastiCache<br/>Redis 7.0 Cluster")]
+            end
+
+            subgraph Endpoints["VPC Gateway Endpoints"]
+                S3Endpoint["S3 Gateway Endpoint<br/>(Free internal S3 routing)"]
+            end
+        end
+
+        subgraph Management["Supporting Services"]
+            ECR["Amazon ECR<br/>Scan-on-Push, KMS Encrypted"]
+            Secrets["AWS Secrets Manager<br/>& KMS Customer Managed Keys"]
+            CW["Amazon CloudWatch<br/>Logs, Alarms, Dashboard"]
+        end
+    end
+
+    CF --> WAF
+    WAF --> ALB
+    ALB -->|Target Group Port 4000| Fargate1
+    ALB -->|Target Group Port 4000| Fargate2
+    Fargate1 -->|Port 5432| RDS
+    Fargate2 -->|Port 5432| RDS
+    Fargate1 -->|Port 6379| Redis
+    Fargate2 -->|Port 6379| Redis
+    Fargate1 --> NAT
+    Fargate2 --> NAT
+    Fargate1 -.-> S3Endpoint
+    Fargate2 -.-> S3Endpoint
 ```
-                                [ Internet Clients ]
-                                          │
-                                          ▼
-                               ┌──────────────────────┐
-                               │    Cloudflare Edge   │
-                               │  DNS, CDN, Full TLS  │
-                               └──────────┬───────────┘
-                                          │
-                                          ▼
-                         ┌──────────────────────────────────┐
-                         │      AWS WAFv2 WebACL Rules      │
-                         │  Common, SQLi, BadInputs, Limits │
-                         └────────────────┬─────────────────┘
-                                          │
-                                          ▼
-                         ┌──────────────────────────────────┐
-                         │   Application Load Balancer      │
-                         │   Dual AZ (us-east-1a, 1b)       │
-                         └────────────────┬─────────────────┘
-                                          │ Target Group (Port 4000)
-                   ┌──────────────────────┴──────────────────────┐
-                   │                                             │
-                   ▼                                             ▼
-  ┌──────────────────────────────────┐          ┌──────────────────────────────────┐
-  │   Private Subnet A (App Tier)    │          │   Private Subnet B (App Tier)    │
-  │   ECS Fargate Task 1 (Primary)   │          │   ECS Fargate Task 2 (Spot Base) │
-  └────────────────┬─────────────────┘          └────────────────┬─────────────────┘
-                   │                                             │
-                   └──────────────────────┬──────────────────────┘
-                                          │ Chained SG (Port 5432)
-                                          ▼
-                         ┌──────────────────────────────────┐
-                         │   Private Subnet (Data Tier)     │
-                         │   Amazon RDS PostgreSQL 15       │
-                         │   KMS Encrypted, Forced TLS 1.2+ │
-                         └──────────────────────────────────┘
-```
+
+### Cloud Infrastructure Components
+
+| Service | Role | Configuration Details |
+| :--- | :--- | :--- |
+| **Cloudflare** | Edge DNS, CDN, & SSL | CNAME proxying to AWS ALB; Full (Strict) SSL/TLS encryption; HTTP/2 and HTTP/3 support; DDoS mitigation. |
+| **AWS WAFv2** | Application Firewall | Attached to ALB; enforces `CommonRuleSet`, `SQLiRuleSet`, `KnownBadInputsRuleSet`, and rate limits on API and AI endpoints. |
+| **AWS ALB** | Load Balancing | Dual-AZ public Application Load Balancer with health checks on `/health` and zero-downtime rolling connection draining. |
+| **AWS ECS Fargate** | Compute Tier | Multi-AZ containerized service (`terraviz3d-cluster-production`) running 2 tasks (On-Demand + Spot mix) with 70% CPU target tracking auto-scaling. |
+| **Amazon ECR** | Container Registry | Private repository with KMS encryption, scan-on-push vulnerability scanning, and lifecycle rules retaining the last 5 images. |
+| **Amazon RDS** | Relational Database | PostgreSQL 15 on `db.t4g.micro` across private DB subnets; KMS customer-managed key encryption; deletion protection; forced TLS 1.2+. |
+| **Amazon ElastiCache** | In-Memory Cache | Redis 7.0 cluster in private subnets for session caching and external API buffering. |
+| **AWS Secrets Manager & KMS** | Secret & Key Management | Customer Managed Keys (`alias/terraviz3d-data`, `alias/terraviz3d-logs`) and centralized secret storage for credentials. |
+| **Amazon CloudWatch** | Observability | Container log streaming with 30-day retention; operational metric dashboard; alarms for CPU, memory, 5xx errors, and DB connections. |
+| **Terraform** | Infrastructure as Code | Modularized root configuration (`network`, `compute`, `data`, `security`, `monitoring`, `iam`) with remote S3 backend and DynamoDB locking. |
 
 ---
 
-## Cloud Infrastructure Breakdown
+## TerraViz Website Services
 
-### 1. Edge Layer: Cloudflare
-- **Role:** Handles global DNS resolution, edge caching, and strict SSL/TLS encryption.
-- **Implementation:** Proxies incoming requests directly to the AWS Application Load Balancer origin while hiding origin IP addresses. Enforces HTTPS, HTTP/2, and HTTP/3 transport.
+### 1. 3D Globe & Real-Time Earthquake Monitoring Service
+The primary visualization service renders an interactive WebGL Earth featuring custom GLSL atmosphere shaders, bump-mapped terrain topography, dynamic cloud rotation, and starfield rendering. 
 
-![Cloudflare Configuration](docs/screenshots/cloudflare-dns-ssl.png)
-*Cloudflare DNS, SSL/TLS, and edge caching configuration.*
+The service ingests the live USGS M4.5+ earthquake stream over a 30-day window, converts latitude/longitude coordinates into 3D Cartesian coordinates, and renders each event as an illuminated, magnitude-scaled cylinder. Selecting any marker displays comprehensive seismic metadata including magnitude, depth, recording time, and tsunami flags.
 
----
-
-### 2. Perimeter Security: AWS WAFv2
-- **Role:** Protects the public Application Load Balancer from automated bot traffic, exploit payloads, and denial-of-service attempts.
-- **Rule Sets Enforced:**
-  - `AWSManagedRulesCommonRuleSet`: Mitigates OWASP Top 10 vulnerabilities.
-  - `AWSManagedRulesKnownBadInputsRuleSet`: Blocks malicious request patterns and path traversal.
-  - `AWSManagedRulesSQLiRuleSet`: Protects against SQL injection vectors across headers and query parameters.
-  - Rate-based IP limiting rules for the general API and dedicated rate limits on `/api/ai` query endpoints.
-
-![AWS WAFv2 Dashboard](docs/screenshots/aws-waf.png)
-*AWS WAF WebACL rule groups and traffic inspection metrics.*
+![TerraViz 3D Earthquake Monitoring Service](docs/screenshots/earthquake-service.png)
 
 ---
 
-### 3. Traffic Distribution: AWS Application Load Balancer (ALB)
-- **Role:** Distributes traffic across backend container instances across two Availability Zones (`us-east-1a` and `us-east-1b`).
-- **Configuration:**
-  - Standard HTTP/HTTPS listeners forwarding to backend Target Group `terraviz3d-production-tg`.
-  - Configured with proactive health check polling against `/health`.
-  - Zero-downtime rolling task deregistration and connection draining enabled.
+### 2. Global Population Intelligence Service
+The demographic visualization service provides worldwide population density mapping across 195+ sovereign nations. Country metrics are retrieved via the backend proxy caching layer and mapped to 3D logarithmic pillar extrusions at national geographic centroids, allowing visual correlation between human population concentrations and active tectonic boundary lines.
 
-![AWS Application Load Balancer](docs/screenshots/aws-alb-target-group.png)
-*Application Load Balancer listeners, target groups, and healthy target states.*
+![TerraViz World Population Service](docs/screenshots/population-service.png)
 
 ---
 
-### 4. Compute Tier: AWS Elastic Container Service (ECS) Fargate
-- **Role:** Runs the containerized Node.js backend and Single-Page Application (SPA) in a serverless, managed container environment.
-- **Configuration:**
-  - Cluster: `terraviz3d-cluster-production`
-  - Service: `terraviz3d-backend-svc`
-  - Capacity Providers: Multi-tier deployment combining On-Demand base tasks for baseline availability with Fargate Spot instances for compute cost reduction.
-  - Resilience: Automatic rolling updates with `minimumHealthyPercent = 100` and `maximumPercent = 200`, ensuring updated containers pass health checks before older tasks retire.
-  - Auto-scaling: Target Tracking policies scaling container counts based on 70% average CPU utilization.
+### 3. AI Geospatial Assistant Service (TerraViz AI)
+The platform includes an AI seismologist assistant built directly into the 3D globe interface. Rather than returning raw database records, the assistant evaluates seismic context and translates technical parameters into real-world meaning (such as structural shaking intensity and tsunami risk) while actively directing the user where to inspect on the globe.
 
-![AWS ECS Fargate](docs/screenshots/aws-ecs-fargate.png)
-*ECS cluster, active service status, task definitions, and running Fargate tasks.*
+#### Hybrid Graph-RAG Architecture
+1. **Preprocessing & Embedding:** Real-time GeoJSON seismic events are parsed into standardized descriptions, embedded into 384-dimensional vectors using `@xenova/transformers` (`all-MiniLM-L6-v2`), and indexed into PostgreSQL.
+2. **Knowledge Graph Expansion:** Semantic edges (`rag_edges`) link events sharing regional tectonic faults, temporal 7-day windows, and similar magnitude thresholds.
+3. **Hybrid 3-Stage Retrieval:** Queries are resolved through vector cosine similarity search, PostgreSQL `pg_trgm` full-text search, and graph edge traversal, combined using Reciprocal Rank Fusion (RRF).
+4. **Answer-First Inference:** Context is processed via Groq (`openai/gpt-oss-20b`) enforcing conclusion-first responses, register matching, and automated globe marker focus.
 
----
-
-### 5. Container Registry: Amazon Elastic Container Registry (ECR)
-- **Role:** Secure, private Docker image repository for container versions.
-- **Configuration:**
-  - Repository: `terraviz-backend`
-  - Security: KMS encryption at rest using AWS managed keys; scan-on-push automated vulnerability assessment.
-  - Lifecycle Policies: Retains the latest 5 image revisions, automatically pruning orphaned layers to control storage costs.
-
-![Amazon ECR](docs/screenshots/aws-ecr-repository.png)
-*Amazon ECR repository with tagged image revisions and vulnerability scanning results.*
+![TerraViz AI Seismologist Assistant](docs/screenshots/ai-chat-service.png)
 
 ---
 
-### 6. Data Tier: Amazon Relational Database Service (RDS)
-- **Role:** Managed relational database storing user accounts, authentication sessions, audit logs, vector chunks, and knowledge graph edges.
-- **Configuration:**
-  - Engine: PostgreSQL 15 on `db.t4g.micro` instance class.
-  - High Availability: DB Subnet Group spanning across multiple private subnets.
-  - Security: Deletion protection enabled, automated daily snapshots, storage encrypted using KMS Customer Managed Key (`alias/terraviz3d-data`).
-  - Network Isolation: Chained security groups allowing incoming port 5432 connections strictly from the ECS application security group.
-  - Encryption in Transit: Database parameter group enforces `rds.force_ssl = 1` for TLS 1.2+ mandatory transport.
+### 4. User Authentication & Access Control Service
+The authentication service provides identity management and session isolation:
+- **Stateless Tokens:** JSON Web Tokens (JWT) signed with HMAC-SHA256, transmitted in `HttpOnly`, `SameSite=Lax` cookies and Bearer headers.
+- **Credential Security:** Passwords hashed with `bcryptjs` and salt rounds.
+- **Brute Force Protection:** Automatic account lockout after 5 consecutive failed login attempts (15-minute lockout period).
+- **Audit Logging:** Every authentication and security event is permanently written to an append-only `audit_logs` table in PostgreSQL.
 
-![Amazon RDS PostgreSQL](docs/screenshots/aws-rds-postgres.png)
-*RDS PostgreSQL configuration, connectivity security groups, and storage encryption.*
+![TerraViz User Authentication Service](docs/screenshots/auth-service.png)
 
 ---
 
-### 7. In-Memory Caching: Amazon ElastiCache
-- **Role:** Redis caching cluster for session storage and temporary caching of third-party geospatial API responses.
-- **Configuration:**
-  - Multi-AZ subnet placement within isolated private data subnets.
-  - Security group boundaries restricted to the backend application layer.
+### 5. Mobile Responsive Interface Service
+The application includes a touch-optimized mobile experience designed for smartphones and tablets:
+- **Touch Gestures:** Native 1-finger orbit rotation, 2-finger pinch-to-zoom (clamped between 1.2x and 4.0x radius), and touch-tap marker selection with `touch-action: none` isolation.
+- **Ergonomic Navigation:** Compact mobile top bar, off-canvas slide-out drawer, floating bottom quick-actions dock, and draggable bottom sheets for the AI assistant and event inspector.
 
-![Amazon ElastiCache](docs/screenshots/aws-elasticache.png)
-*Amazon ElastiCache cluster configuration and node metrics.*
-
----
-
-### 8. Key Management & Secrets
-- **AWS Secrets Manager:** Centralized store for sensitive database credentials, JWT secrets, and external AI provider keys (`/app/backend/app_secrets`).
-- **AWS KMS (Key Management Service):** Dedicated Customer Managed Keys (CMKs) used for envelope encryption of databases, ECR repositories, and CloudWatch log groups.
-
-![AWS Secrets Manager and KMS](docs/screenshots/aws-secrets-kms.png)
-*AWS Secrets Manager secrets and KMS encryption keys.*
-
----
-
-### 9. Observability & Monitoring: AWS CloudWatch
-- **Role:** Centralized logging, metric alarms, and real-time operations dashboard.
-- **Components:**
-  - Centralized log streaming from Fargate containers to `/ecs/terraviz3d-backend` with 30-day retention.
-  - Operational dashboard tracking ALB request counts, HTTP 5xx rates, target response latencies, ECS CPU/Memory utilization, and active RDS database connections.
-  - Automated CloudWatch metric alarms for high CPU and anomalous error thresholds.
-
-![AWS CloudWatch Dashboard](docs/screenshots/aws-cloudwatch-dashboard.png)
-*CloudWatch operational dashboard showing live system metrics and log streams.*
-
----
-
-### 10. Automated Infrastructure: Terraform
-- **Role:** Complete Infrastructure as Code (IaC) modularization.
-- **Modules:**
-  - `network`: Custom VPC, multi-AZ public and private subnets, NAT Gateway, route tables, S3 Gateway endpoint.
-  - `security`: KMS Customer Managed Keys, Secrets Manager, AWS WAFv2 WebACL.
-  - `compute`: Application Load Balancer, Target Groups, ECS Cluster, Task Definitions, Fargate Services, ECR repository.
-  - `data`: RDS PostgreSQL multi-AZ subnet groups, security groups, parameter groups, ElastiCache Redis.
-  - `monitoring`: CloudWatch log groups, metric alarms, centralized operations dashboard.
-  - `iam`: Role definitions, MFA boundary requirements, permission boundaries.
-
-![Terraform Deployment](docs/screenshots/terraform-deployment.png)
-*Terraform state validation and module execution output.*
-
----
-
-## Application Architecture
-
-### 1. Interactive 3D WebGL Globe
-The client-side visualization is built with Three.js and custom GLSL shaders:
-- **Atmosphere Shaders:** Multi-layer Rayleigh and Mie atmospheric scattering effect.
-- **Textures:** Bump-mapped terrain topography, dynamic cloud rotation layers, and high-resolution Earth day/night maps.
-- **Hardware Acceleration:** Frame-rate locked rendering loop optimized for standard and high-DPI displays.
-- **Interactive Raycasting:** Real-time pointer and touch raycasting for direct selection of geographic 3D markers.
-
-![3D Globe Dashboard](docs/screenshots/app-dashboard.png)
-*TerraViz 3D interface rendering active earthquake markers and metadata inspector.*
-
----
-
-### 2. Real-Time Geospatial Pipelines
-- **Earthquake Feed:** USGS Real-time GeoJSON API (M4.5+ events globally over 30 days). Events are normalized into spherical coordinates and rendered as magnitude-scaled glowing cylinders.
-- **Population Distribution:** Demographic data for 195+ countries rendered as logarithmic pillar extrusions positioned at national capital coordinates.
-- **Proxy Caching Layer:** Backend proxy caching engine with in-memory TTL caching prevents external API rate-limiting and reduces client-side payload sizes.
-
----
-
-### 3. Hybrid Graph-RAG AI Pipeline
-The platform includes an AI assistant that interprets real-time seismic events rather than outputting raw database records:
-
-1. **Preprocessing & Embedding:**
-   - Raw GeoJSON events are preprocessed into standardized descriptive text including magnitude, place, depth, timestamp, and tsunami risk indicators.
-   - Vector embeddings are generated via the HuggingFace `@xenova/transformers` model (`all-MiniLM-L6-v2`, 384 dimensions).
-   - Knowledge graph edges (`rag_edges`) are calculated across three relationships:
-     - `same_region`: Shared geographic tectonic sectors.
-     - `temporal_cluster`: Events occurring within a 7-day sliding window.
-     - `magnitude_similar`: Events within 0.5 magnitude variance.
-2. **Hybrid 3-Stage Retrieval:**
-   - Stage 1: Vector cosine similarity search across primary text chunks.
-   - Stage 2: Full-text keyword matching using PostgreSQL `pg_trgm` and `tsvector` indexes.
-   - Stage 3: Knowledge graph edge expansion traversing related nodes.
-   - Fusion: Reciprocal Rank Fusion (RRF) scores and ranks combined candidates.
-3. **Domain-Specific Generation:**
-   - Context is passed to Groq (`openai/gpt-oss-20b`) via a system prompt enforcing:
-     - Answer-first conclusions in sentence one.
-     - Physical real-world translation of numbers (e.g. M5.0 shaking vs. M7.0 destructive potential).
-     - Connected analytical prose with register matching.
-     - Active globe coordinate guidance directing the user where to inspect on the 3D map.
-
-![AI Assistant Panel](docs/screenshots/ai-chat-interface.png)
-*AI assistant delivering interpreted seismic intelligence with automated globe marker highlights.*
-
----
-
-### 4. Authentication & Security
-- **Authentication:** Stateless JSON Web Tokens (JWT) signed with HMAC-SHA256.
-- **Transport Security:** Tokens transmitted in secure `HttpOnly`, `SameSite=Lax` cookies, paired with Bearer token authentication headers.
-- **Password Security:** Password hashing using `bcryptjs` with salt rounds.
-- **Brute Force Protection:** Account lockout mechanism (5 consecutive failed attempts trigger an automatic 15-minute lock).
-- **Session & Audit Logging:** Active sessions tracked in PostgreSQL; authentication events recorded in an append-only `audit_logs` table.
-
----
-
-### 5. Mobile Responsive Design
-- **Touch Gesture Engine:** Custom 1-finger rotate, 2-finger pinch-to-zoom (clamped between 1.2x and 4.0x radius), and touch tap selection.
-- **Touch Action Isolation:** Canvas-level touch handling avoids pull-to-refresh or page scroll conflicts.
-- **Ergonomic Controls:** Slide-out drawer navigation, bottom quick actions dock, and sliding bottom sheets for the AI Chat Panel and Earthquake Info Inspector adhering to device safe-area insets (`env(safe-area-inset-bottom)`).
-
-![Mobile Interface](docs/screenshots/mobile-view.png)
-*Mobile view showing touch-optimized globe navigation, quick dock, and bottom sheet panels.*
+![TerraViz Mobile Responsive Service](docs/screenshots/mobile-responsive-service.png)
 
 ---
 
@@ -254,7 +144,7 @@ The platform includes an AI assistant that interprets real-time seismic events r
 
 ### Backend
 - **Runtime:** Node.js 22 LTS, Express 4.18
-- **Database:** PostgreSQL 15 (`pg`), pg_trgm
+- **Database:** PostgreSQL 15 (`pg`), pg_trgm extension
 - **ML & Embeddings:** `@xenova/transformers` (`all-MiniLM-L6-v2`)
 - **LLM Inference:** Groq SDK (`openai/gpt-oss-20b`)
 - **Security:** Helmet, CORS, bcryptjs, jsonwebtoken, cookie-parser, express-rate-limit
@@ -263,13 +153,13 @@ The platform includes an AI assistant that interprets real-time seismic events r
 - **Cloud Provider:** Amazon Web Services (AWS)
 - **Edge / CDN:** Cloudflare (DNS, SSL/TLS Termination, Caching)
 - **Infrastructure as Code:** Terraform
-- **Containerization:** Docker (Multi-stage Debian minimal builds)
+- **Containerization:** Docker (Multi-stage Debian minimal build)
 - **Container Registry:** Amazon ECR
 - **Container Orchestration:** AWS ECS Fargate
-- **Load Balancing:** AWS Application Load Balancer
+- **Load Balancing:** AWS Application Load Balancer (ALB)
 - **Database Service:** Amazon RDS PostgreSQL
 - **Security:** AWS WAFv2, AWS Secrets Manager, AWS KMS
-- **Observability:** AWS CloudWatch Logs, Metrics, Alarms, Dashboards
+- **Observability:** AWS CloudWatch Logs, Metrics, Alarms, Dashboard
 
 ---
 
@@ -278,14 +168,14 @@ The platform includes an AI assistant that interprets real-time seismic events r
 ```text
 Terraviz3D/
 ├── backend/
-│   ├── public/              # Production static assets served by backend
+│   ├── public/              # Production static assets served by backend container
 │   ├── src/
 │   │   ├── config/          # Database pool and environment configuration
 │   │   ├── controllers/     # AI, Auth, and Geo controllers
 │   │   ├── middleware/      # Auth, rate limiting, and error handling
 │   │   ├── routes/          # API route definitions
 │   │   ├── services/        # RAG, graph, embedding, and geo services
-│   │   ├── tests/           # Automated prompt benchmarks and test suites
+│   │   ├── tests/           # Automated prompt benchmarks and evaluation suites
 │   │   └── server.js        # Express application entrypoint
 │   ├── Dockerfile           # Multi-stage production container build
 │   └── package.json
@@ -315,7 +205,7 @@ Terraviz3D/
 │   └── pack.py              # Deployment bundling utility
 │
 ├── docs/
-│   └── screenshots/         # Architecture and application screenshots
+│   └── screenshots/         # Real screenshots of TerraViz website services
 │
 └── README.md
 ```
@@ -357,7 +247,6 @@ cd backend
 npm install
 npm run dev
 ```
-*(The database schema and initial earthquake data sync run automatically on startup).*
 
 ### 3. Frontend Setup
 In a new terminal window:
