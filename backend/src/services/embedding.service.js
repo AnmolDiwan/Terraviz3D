@@ -1,13 +1,13 @@
 import { pipeline } from '@xenova/transformers';
 
-let embedder = null;
+let embedderPromise = null;
 
 async function getEmbedder() {
-  if (!embedder) {
-    console.log('Loading embedding model...');
-    embedder = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+  if (!embedderPromise) {
+    console.log('[Embedding] Initializing Xenova/all-MiniLM-L6-v2 pipeline...');
+    embedderPromise = pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
   }
-  return embedder;
+  return embedderPromise;
 }
 
 async function embed(text) {
@@ -17,20 +17,20 @@ async function embed(text) {
 }
 
 async function embedBatch(texts) {
-  const CHUNK_SIZE = 32;
+  if (!texts || texts.length === 0) return [];
+  const model = await getEmbedder();
+  const CHUNK_SIZE = 64;
   const allEmbeddings = [];
   
   const totalChunks = Math.ceil(texts.length / CHUNK_SIZE);
   
   for (let i = 0; i < totalChunks; i++) {
-    console.log(`Embedding batch ${i + 1}/${totalChunks}...`);
     const chunk = texts.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE);
-    
-    const chunkEmbeddings = await Promise.all(chunk.map(text => embed(text)));
-    allEmbeddings.push(...chunkEmbeddings);
+    const output = await model(chunk, { pooling: 'mean', normalize: true });
+    allEmbeddings.push(...output.tolist());
   }
   
   return allEmbeddings;
 }
 
-export { embed, embedBatch };
+export { embed, embedBatch, getEmbedder };

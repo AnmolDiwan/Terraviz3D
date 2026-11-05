@@ -325,14 +325,15 @@ export class GlobeEngine {
 
   bindEvents() {
     const c = this.canvas
+    c.style.touchAction = 'none'
 
-    c.addEventListener('mousedown', (e) => {
+    this._onMouseDown = (e) => {
       this.isDragging = true
       this.autoRotate = false
       this.prevMouse = { x: e.clientX, y: e.clientY }
-    })
+    }
 
-    c.addEventListener('mousemove', (e) => {
+    this._onMouseMove = (e) => {
       if (!this.isDragging) return
       const dx = (e.clientX - this.prevMouse.x) * 0.005
       const dy = (e.clientY - this.prevMouse.y) * 0.005
@@ -345,38 +346,119 @@ export class GlobeEngine {
       }
       this._syncLayerRotations()
       this.prevMouse = { x: e.clientX, y: e.clientY }
-    })
+    }
 
-    c.addEventListener('mouseup', () => {
+    this._onMouseUp = () => {
       this.isDragging = false
-      setTimeout(() => { this.autoRotate = true }, 3000)
-    })
+      clearTimeout(this._resumeRotateTimeout)
+      this._resumeRotateTimeout = setTimeout(() => { this.autoRotate = true }, 3000)
+    }
 
-    c.addEventListener('wheel', (e) => {
+    this._onWheel = (e) => {
       e.preventDefault()
       const MIN = 1.2, MAX = 4.0
       this.camera.position.z = Math.max(MIN, Math.min(MAX, this.camera.position.z + e.deltaY * 0.001))
-    }, { passive: false })
+    }
 
-    // Click → raycast across ALL layer groups
-    c.addEventListener('click', (e) => {
-      const mouse = new THREE.Vector2(
-        (e.clientX / window.innerWidth) * 2 - 1,
-        -(e.clientY / window.innerHeight) * 2 + 1
-      )
-      const raycaster = new THREE.Raycaster()
-      raycaster.setFromCamera(mouse, this.camera)
-      const hits = raycaster.intersectObjects(this._getAllLayerChildren())
-      if (hits.length > 0 && hits[0].object.userData?.dataPoint) {
-        this.onMarkerClick?.(hits[0].object.userData.dataPoint)
+    this._onClick = (e) => {
+      this._handlePointerSelect(e.clientX, e.clientY)
+    }
+
+    // Touch events for mobile phones and tablets
+    this._onTouchStart = (e) => {
+      clearTimeout(this._resumeRotateTimeout)
+      this.autoRotate = false
+
+      if (e.touches.length === 1) {
+        this.isDragging = true
+        this.touchMoved = false
+        this.prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+        this.touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+      } else if (e.touches.length === 2) {
+        this.isDragging = false
+        this.touchMoved = true
+        this.pinchStartDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        )
+        this.pinchStartCamZ = this.camera.position.z
       }
-    })
+    }
 
-    window.addEventListener('resize', () => {
+    this._onTouchMove = (e) => {
+      if (e.touches.length === 1 && this.isDragging) {
+        const cx = e.touches[0].clientX
+        const cy = e.touches[0].clientY
+        const dx = (cx - this.prevMouse.x) * 0.005
+        const dy = (cy - this.prevMouse.y) * 0.005
+
+        if (Math.hypot(cx - this.touchStartPos.x, cy - this.touchStartPos.y) > 6) {
+          this.touchMoved = true
+        }
+
+        this.globe.rotation.y += dx
+        this.globe.rotation.x += dy
+        this.globe.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.globe.rotation.x))
+        if (this.clouds) {
+          this.clouds.rotation.y = this.globe.rotation.y
+          this.clouds.rotation.x = this.globe.rotation.x
+        }
+        this._syncLayerRotations()
+        this.prevMouse = { x: cx, y: cy }
+      } else if (e.touches.length === 2 && this.pinchStartDist) {
+        const currentDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        )
+        if (currentDist > 0) {
+          const ratio = this.pinchStartDist / currentDist
+          const MIN = 1.2, MAX = 4.0
+          this.camera.position.z = Math.max(MIN, Math.min(MAX, this.pinchStartCamZ * ratio))
+        }
+        this.touchMoved = true
+      }
+    }
+
+    this._onTouchEnd = (e) => {
+      if (!this.touchMoved && e.changedTouches && e.changedTouches.length === 1) {
+        this._handlePointerSelect(e.changedTouches[0].clientX, e.changedTouches[0].clientY)
+      }
+      this.isDragging = false
+      this.pinchStartDist = null
+      clearTimeout(this._resumeRotateTimeout)
+      this._resumeRotateTimeout = setTimeout(() => { this.autoRotate = true }, 3000)
+    }
+
+    this._onResize = () => {
       this.camera.aspect = window.innerWidth / window.innerHeight
       this.camera.updateProjectionMatrix()
       this.renderer.setSize(window.innerWidth, window.innerHeight)
-    })
+    }
+
+    c.addEventListener('mousedown', this._onMouseDown)
+    c.addEventListener('mousemove', this._onMouseMove)
+    c.addEventListener('mouseup', this._onMouseUp)
+    c.addEventListener('wheel', this._onWheel, { passive: false })
+    c.addEventListener('click', this._onClick)
+
+    c.addEventListener('touchstart', this._onTouchStart, { passive: true })
+    c.addEventListener('touchmove', this._onTouchMove, { passive: true })
+    c.addEventListener('touchend', this._onTouchEnd, { passive: true })
+
+    window.addEventListener('resize', this._onResize)
+  }
+
+  _handlePointerSelect(clientX, clientY) {
+    const mouse = new THREE.Vector2(
+      (clientX / window.innerWidth) * 2 - 1,
+      -(clientY / window.innerHeight) * 2 + 1
+    )
+    const raycaster = new THREE.Raycaster()
+    raycaster.setFromCamera(mouse, this.camera)
+    const hits = raycaster.intersectObjects(this._getAllLayerChildren())
+    if (hits.length > 0 && hits[0].object.userData?.dataPoint) {
+      this.onMarkerClick?.(hits[0].object.userData.dataPoint)
+    }
   }
 
   latLngToVec3(lat, lng, radius = 1.001) {
@@ -617,6 +699,19 @@ export class GlobeEngine {
 
   dispose() {
     cancelAnimationFrame(this.animId)
+    clearTimeout(this._resumeRotateTimeout)
+    const c = this.canvas
+    if (c) {
+      c.removeEventListener('mousedown', this._onMouseDown)
+      c.removeEventListener('mousemove', this._onMouseMove)
+      c.removeEventListener('mouseup', this._onMouseUp)
+      c.removeEventListener('wheel', this._onWheel)
+      c.removeEventListener('click', this._onClick)
+      c.removeEventListener('touchstart', this._onTouchStart)
+      c.removeEventListener('touchmove', this._onTouchMove)
+      c.removeEventListener('touchend', this._onTouchEnd)
+    }
+    window.removeEventListener('resize', this._onResize)
     this.renderer.dispose()
   }
 }

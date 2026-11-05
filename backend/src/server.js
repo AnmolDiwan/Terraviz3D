@@ -1,3 +1,5 @@
+import path from 'path'
+import { fileURLToPath } from 'url'
 import env from './config/env.js'
 import express from 'express'
 import cors from 'cors'
@@ -5,27 +7,40 @@ import helmet from 'helmet'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser'
-import db from './config/db.js'
+import db, { initDb } from './config/db.js'
 import requireAuth from './middleware/auth.js'
 import { authLimiter, aiLimiter } from './middleware/rateLimiter.js'
 import aiRoutes from './routes/ai.routes.js'
 import geoRoutes from './routes/geo.routes.js'
 import errorHandler from './middleware/errorHandler.js'
+import { syncEarthquakesFromUSGS } from './services/rag.service.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const publicPath = path.join(__dirname, '../public')
 
 console.log('GEMINI KEY:', env.GEMINI_API_KEY?.slice(0, 10) + '...')
 
 const app = express()
 
-// Test DB connection on startup
+// Test DB connection on startup and initialize schema
 db.connect()
-  .then(() => console.log('✅ PostgreSQL connected'))
+  .then(async () => {
+    console.log('✅ PostgreSQL connected')
+    await initDb()
+    syncEarthquakesFromUSGS().catch(err => console.warn('[Startup] RAG sync warning:', err.message))
+  })
   .catch(err => console.error('❌ DB connection failed:', err.message))
 
 // ── Middleware ───────────────────────────────────────────────
-app.use(helmet())
-app.use(cors({ origin: env.FRONTEND_URL, credentials: true }))
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false
+}))
+app.use(cors({ origin: env.FRONTEND_URL || true, credentials: true }))
 app.use(express.json({ limit: '10mb' }))
 app.use(cookieParser())
+app.use(express.static(publicPath))
 
 // ══════════════════════════════════════════════════════════════
 // AUTH ROUTES
@@ -169,15 +184,17 @@ app.post('/api/auth/login', async (req, res) => {
       [user.user_id, 'LOGIN_SUCCESS']
     )
 
+    const isHttps = req.secure || req.headers['x-forwarded-proto'] === 'https'
     res.cookie('tv3d_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: isHttps,
+      sameSite: 'lax',
       maxAge: 2 * 60 * 60 * 1000
     })
 
     return res.json({
       success: true,
+      token,
       expiresAt,
       session: {
         sessionId: sessionResult.rows[0].session_id,
@@ -235,8 +252,17 @@ app.get('/api/auth/me', requireAuth, async (req, res) => {
     if (!result.rows[0]) return res.status(404).json({ error: 'User not found' })
     const u = result.rows[0]
     return res.json({
-      userId: u.user_id, username: u.username,
-      email: u.email,   role: u.role
+      success: true,
+      userId: u.user_id,
+      username: u.username,
+      email: u.email,
+      role: u.role,
+      user: {
+        userId: u.user_id,
+        username: u.username,
+        email: u.email,
+        role: u.role
+      }
     })
   } catch (err) {
     return res.status(500).json({ error: 'Server error' })
@@ -259,6 +285,12 @@ app.use('/api/ai', aiRoutes)
 
 // ── Geo Routes ────────────────────────────────────────────────
 app.use('/api/geo', geoRoutes)
+
+// ── SPA Fallback ──────────────────────────────────────────────
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api') || req.path === '/health') return next()
+  res.sendFile(path.join(publicPath, 'index.html'))
+})
 
 app.use(errorHandler)
 

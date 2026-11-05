@@ -1,0 +1,15 @@
+aws_region         = "us-east-1"
+project            = "TerraViz3D"
+environment        = "production"
+alert_email        = "anmol.diwan12@gmail.com"
+
+# Sensitive variables (supply via CLI, environment variables, or tfvars)
+db_username        = "terraviz_admin"
+db_password        = "ReplaceWithSecurePassword123!"
+db_name            = "terraviz"
+jwt_secret         = "ReplaceWithRandom64CharSecretStringForJWT!"
+groq_api_key       = "gsk_YourGroqApiKeyHere"
+
+# Feature flags
+waf_mode_count     = true
+enable_elasticache = false

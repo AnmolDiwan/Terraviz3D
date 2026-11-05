@@ -6,9 +6,24 @@ import { geoService } from './services/geo.service.js'
 import { aiService } from './services/ai.service.js'
 import './App.css'
 
+// ── Responsive Mobile Hook ───────────────────────────────────
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.innerWidth < breakpoint
+  })
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < breakpoint)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [breakpoint])
+
+  return isMobile
+}
 
 // ── Auth Modal ───────────────────────────────────────────────
-function AuthModal({ onClose, login, register }) {
+function AuthModal({ onClose, login, register, isMobile }) {
   const [mode, setMode] = useState('login')
   const [form, setForm] = useState({ username: '', email: '', password: '' })
   const [error, setError] = useState('')
@@ -51,10 +66,11 @@ function AuthModal({ onClose, login, register }) {
     background: 'rgba(255,255,255,0.03)',
     border: '1px solid rgba(99,179,255,0.12)',
     borderRadius: 12, color: '#e2e8f0',
-    fontSize: 14, outline: 'none',
+    fontSize: isMobile ? 16 : 14, outline: 'none',
     fontFamily: "'Inter', sans-serif",
     transition: 'all 0.25s ease',
     width: '100%',
+    boxSizing: 'border-box',
   }
 
   return (
@@ -64,9 +80,13 @@ function AuthModal({ onClose, login, register }) {
       backdropFilter: 'blur(12px)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       zIndex: 100, animation: 'fadeIn 0.2s ease',
+      padding: isMobile ? 16 : 0,
+      boxSizing: 'border-box',
     }}>
       <div style={{
-        width: 380, padding: '44px 36px',
+        width: '100%',
+        maxWidth: 380,
+        padding: isMobile ? '32px 22px' : '44px 36px',
         background: 'linear-gradient(160deg, #0a1628 0%, #060d1c 100%)',
         border: '1px solid rgba(99,179,255,0.15)',
         borderRadius: 24,
@@ -74,6 +94,7 @@ function AuthModal({ onClose, login, register }) {
         color: '#e2e8f0', position: 'relative', overflow: 'hidden',
         boxShadow: '0 24px 80px rgba(0,0,0,0.6), 0 0 40px rgba(59,130,246,0.08)',
         animation: 'slideUp 0.3s ease',
+        boxSizing: 'border-box',
       }}>
         {/* top glow */}
         <div style={{
@@ -84,7 +105,7 @@ function AuthModal({ onClose, login, register }) {
         <div style={{ textAlign: 'center', fontFamily: "'Orbitron',monospace", fontSize: 10, color: '#3b82f6', letterSpacing: '0.2em', fontWeight: 600 }}>
           TERRAVIZ 3D
         </div>
-        <div style={{ textAlign: 'center', fontSize: 24, fontWeight: 600, letterSpacing: '-0.02em' }}>
+        <div style={{ textAlign: 'center', fontSize: isMobile ? 22 : 24, fontWeight: 600, letterSpacing: '-0.02em' }}>
           {mode === 'login' ? 'Welcome Back' : 'Create Account'}
         </div>
         <div style={{ textAlign: 'center', fontSize: 13, color: '#475569', marginBottom: 4 }}>
@@ -142,7 +163,7 @@ function AuthModal({ onClose, login, register }) {
 
         <div onClick={onClose} style={{
           textAlign: 'center', fontSize: 12, color: '#334155',
-          cursor: 'pointer', transition: 'color 0.2s',
+          cursor: 'pointer', transition: 'color 0.2s', padding: 4,
         }}>
           Continue as guest
         </div>
@@ -152,12 +173,25 @@ function AuthModal({ onClose, login, register }) {
 }
 
 // ── Info Panel ───────────────────────────────────────────────
-function InfoPanel({ data, onClose }) {
+function InfoPanel({ data, onClose, isMobile }) {
   if (!data) return null
 
   const isPop = data.category === 'population'
 
-  const panelBase = {
+  const panelBase = isMobile ? {
+    position: 'fixed', bottom: 'calc(14px + env(safe-area-inset-bottom, 0px))',
+    left: 12, right: 12, width: 'auto',
+    maxWidth: 'calc(100vw - 24px)',
+    background: 'linear-gradient(160deg, #080f24 0%, #040a16 100%)',
+    backdropFilter: 'blur(24px)',
+    borderRadius: 18, padding: '18px 20px',
+    zIndex: 40, fontFamily: "'Inter', sans-serif",
+    color: '#e2e8f0',
+    animation: 'slideUp 0.3s ease',
+    overflow: 'hidden',
+    boxShadow: '0 12px 48px rgba(0,0,0,0.7)',
+    boxSizing: 'border-box',
+  } : {
     position: 'absolute', bottom: 32, right: 32,
     width: 300,
     background: 'linear-gradient(160deg, #080f24 0%, #040a16 100%)',
@@ -199,24 +233,24 @@ function InfoPanel({ data, onClose }) {
 
         <div style={{
           fontSize: 9, color: '#06b6d4', fontWeight: 600,
-          fontFamily: "var(--font-display)", letterSpacing: '0.2em', marginBottom: 10,
+          fontFamily: "var(--font-display)", letterSpacing: '0.2em', marginBottom: 8,
         }}>
           POPULATION DATA
         </div>
 
-        <div style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', lineHeight: 1.1, marginBottom: 6 }}>
+        <div style={{ fontSize: isMobile ? 18 : 20, fontWeight: 700, color: '#f1f5f9', lineHeight: 1.1, marginBottom: 4 }}>
           {data.metadata?.name || 'Unknown'}
         </div>
 
         <div style={{
-          fontSize: 36, fontWeight: 800, color: '#06b6d4',
-          fontFamily: "var(--font-display)", lineHeight: 1, marginBottom: 10,
+          fontSize: isMobile ? 30 : 36, fontWeight: 800, color: '#06b6d4',
+          fontFamily: "var(--font-display)", lineHeight: 1, marginBottom: 8,
         }}>
           {formatted}
         </div>
 
         <div style={{
-          fontSize: 11, color: '#475569', marginBottom: 12,
+          fontSize: 11, color: '#475569', marginBottom: 10,
           fontFamily: "var(--font-mono)", letterSpacing: '0.04em',
         }}>
           {data.lat?.toFixed(2)}° {data.lat > 0 ? 'N' : 'S'} &nbsp;
@@ -225,9 +259,9 @@ function InfoPanel({ data, onClose }) {
 
         {data.metadata?.capital && (
           <div style={{
-            fontSize: 13, marginBottom: 8, padding: '10px 12px',
+            fontSize: 12, marginBottom: 8, padding: '8px 10px',
             background: 'rgba(6,182,212,0.05)',
-            borderRadius: 10, borderLeft: '3px solid #06b6d4',
+            borderRadius: 8, borderLeft: '3px solid #06b6d4',
           }}>
             <span style={{ fontSize: 10, color: '#475569', display: 'block', marginBottom: 2 }}>Capital</span>
             {data.metadata.capital}
@@ -239,7 +273,7 @@ function InfoPanel({ data, onClose }) {
             fontSize: 11, color: '#155e75',
             fontFamily: "var(--font-mono)",
             background: 'rgba(6,182,212,0.04)',
-            padding: '6px 10px', borderRadius: 6,
+            padding: '5px 8px', borderRadius: 6,
             display: 'inline-block',
           }}>
             {data.metadata.region}
@@ -263,20 +297,20 @@ function InfoPanel({ data, onClose }) {
 
       <div style={{
         fontSize: 9, color: color, fontWeight: 600,
-        fontFamily: "var(--font-display)", letterSpacing: '0.2em', marginBottom: 10,
+        fontFamily: "var(--font-display)", letterSpacing: '0.2em', marginBottom: 8,
       }}>
         SEISMIC EVENT
       </div>
 
       <div style={{
-        fontSize: 44, fontWeight: 800, color, lineHeight: 1, marginBottom: 6,
+        fontSize: isMobile ? 36 : 44, fontWeight: 800, color, lineHeight: 1, marginBottom: 4,
         fontFamily: "var(--font-display)",
       }}>
         M{mag}
       </div>
 
       <div style={{
-        fontSize: 11, color: '#475569', marginBottom: 12,
+        fontSize: 11, color: '#475569', marginBottom: 10,
         fontFamily: "var(--font-mono)", letterSpacing: '0.04em',
       }}>
         {data.lat?.toFixed(3)}° {data.lat > 0 ? 'N' : 'S'} &nbsp;
@@ -285,9 +319,9 @@ function InfoPanel({ data, onClose }) {
 
       {data.metadata?.place && (
         <div style={{
-          fontSize: 13, marginBottom: 10, padding: '10px 12px',
+          fontSize: 12, marginBottom: 8, padding: '8px 10px',
           background: `${color}08`,
-          borderRadius: 10, borderLeft: `3px solid ${color}`,
+          borderRadius: 8, borderLeft: `3px solid ${color}`,
         }}>
           {data.metadata.place}
         </div>
@@ -295,10 +329,10 @@ function InfoPanel({ data, onClose }) {
 
       {data.metadata?.time && (
         <div style={{
-          fontSize: 11, color: '#1e3a5f',
+          fontSize: 10, color: '#38bdf8',
           fontFamily: "var(--font-mono)",
           background: 'rgba(99,179,255,0.04)',
-          padding: '6px 10px', borderRadius: 6,
+          padding: '5px 8px', borderRadius: 6,
           display: 'inline-block',
         }}>
           {new Date(data.metadata.time).toUTCString()}
@@ -346,9 +380,32 @@ function LayerButton({ label, active, color, glowColor, onClick }) {
 }
 
 // ── Sidebar ──────────────────────────────────────────────────
-function Sidebar({ user, layerOn, popLayerOn, status, onEarthquakes, onPopulation, onClear, onShowAuth, onLogout, onToggleAI }) {
-  return (
-    <div style={{
+function Sidebar({
+  user, layerOn, popLayerOn, status,
+  onEarthquakes, onPopulation, onClear,
+  onShowAuth, onLogout, onToggleAI,
+  isMobile, isOpen, onClose
+}) {
+  if (isMobile && !isOpen) return null
+
+  const handleAction = (callback) => {
+    callback?.()
+    if (isMobile) onClose?.()
+  }
+
+  const drawerContent = (
+    <div style={isMobile ? {
+      position: 'fixed', top: 0, left: 0, bottom: 0,
+      width: 'min(290px, 82vw)',
+      background: 'linear-gradient(180deg, #060e22 0%, #040a18 100%)',
+      borderRight: '1px solid rgba(99,179,255,0.15)',
+      padding: '20px 16px calc(20px + env(safe-area-inset-bottom, 0px))',
+      display: 'flex', flexDirection: 'column', gap: 6,
+      zIndex: 50, overflowY: 'auto',
+      fontFamily: "var(--font-body)",
+      animation: 'slideIn 0.25s ease',
+      boxShadow: '10px 0 40px rgba(0,0,0,0.8)',
+    } : {
       position: 'absolute', top: 0, left: 0, bottom: 0, width: 240,
       background: 'linear-gradient(180deg, #060e22 0%, #040a18 100%)',
       borderRight: '1px solid rgba(99,179,255,0.08)',
@@ -372,21 +429,33 @@ function Sidebar({ user, layerOn, popLayerOn, status, onEarthquakes, onPopulatio
         animation: 'scan 6s linear infinite', pointerEvents: 'none',
       }} />
 
-      {/* ─── Logo ─────────────────────────────────────────── */}
+      {/* ─── Header & Logo ─────────────────────────────────── */}
       <div style={{
-        fontFamily: "var(--font-display)", fontSize: 13, fontWeight: 700,
-        color: '#7dd3fc', letterSpacing: '0.14em',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         paddingBottom: 16, borderBottom: '1px solid rgba(99,179,255,0.08)',
-        display: 'flex', alignItems: 'center', gap: 10,
         position: 'relative', zIndex: 1,
       }}>
         <div style={{
-          width: 9, height: 9, borderRadius: '50%',
-          background: 'linear-gradient(135deg, #60a5fa, #3b82f6)',
-          boxShadow: '0 0 10px #3b82f6, 0 0 20px rgba(59,130,246,0.3)',
-          animation: 'pulse 2.5s infinite',
-        }} />
-        TERRAVIZ 3D
+          fontFamily: "var(--font-display)", fontSize: 13, fontWeight: 700,
+          color: '#7dd3fc', letterSpacing: '0.14em',
+          display: 'flex', alignItems: 'center', gap: 10,
+        }}>
+          <div style={{
+            width: 9, height: 9, borderRadius: '50%',
+            background: 'linear-gradient(135deg, #60a5fa, #3b82f6)',
+            boxShadow: '0 0 10px #3b82f6, 0 0 20px rgba(59,130,246,0.3)',
+            animation: 'pulse 2.5s infinite',
+          }} />
+          TERRAVIZ 3D
+        </div>
+        {isMobile && (
+          <button onClick={onClose} style={{
+            width: 28, height: 28, borderRadius: 8,
+            background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+            color: '#94a3b8', fontSize: 13, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>✕</button>
+        )}
       </div>
 
       {/* ─── User chip ────────────────────────────────────── */}
@@ -440,12 +509,12 @@ function Sidebar({ user, layerOn, popLayerOn, status, onEarthquakes, onPopulatio
       <LayerButton
         label="Earthquakes" active={layerOn}
         color="#60a5fa" glowColor="rgba(59,130,246)"
-        onClick={onEarthquakes}
+        onClick={() => handleAction(onEarthquakes)}
       />
       <LayerButton
         label="Population" active={popLayerOn}
         color="#22d3ee" glowColor="rgba(6,182,212)"
-        onClick={onPopulation}
+        onClick={() => handleAction(onPopulation)}
       />
 
       {/* Status chip */}
@@ -463,7 +532,7 @@ function Sidebar({ user, layerOn, popLayerOn, status, onEarthquakes, onPopulatio
       )}
 
       {/* Clear All */}
-      <button onClick={onClear} style={{
+      <button onClick={() => handleAction(onClear)} style={{
         padding: '10px 14px', position: 'relative', zIndex: 1,
         background: 'rgba(255,255,255,0.02)',
         border: '1px solid rgba(255,255,255,0.05)',
@@ -487,7 +556,7 @@ function Sidebar({ user, layerOn, popLayerOn, status, onEarthquakes, onPopulatio
       </div>
 
       {/* AI Assistant */}
-      <button onClick={onToggleAI} style={{
+      <button onClick={() => handleAction(onToggleAI)} style={{
         padding: '11px 14px', position: 'relative', zIndex: 1, width: '100%',
         background: 'rgba(139,92,246,0.05)',
         border: '1px solid rgba(139,92,246,0.14)',
@@ -512,7 +581,7 @@ function Sidebar({ user, layerOn, popLayerOn, status, onEarthquakes, onPopulatio
 
       {/* Auth */}
       {user ? (
-        <button onClick={onLogout} style={{
+        <button onClick={() => handleAction(onLogout)} style={{
           padding: '10px 14px', position: 'relative', zIndex: 1, width: '100%',
           background: 'rgba(239,68,68,0.04)',
           border: '1px solid rgba(239,68,68,0.1)',
@@ -524,7 +593,7 @@ function Sidebar({ user, layerOn, popLayerOn, status, onEarthquakes, onPopulatio
           <span style={{ fontSize: 11 }}>↩</span> Sign Out
         </button>
       ) : (
-        <button onClick={onShowAuth} style={{
+        <button onClick={() => handleAction(onShowAuth)} style={{
           padding: '12px 14px', position: 'relative', zIndex: 1, width: '100%',
           background: 'linear-gradient(135deg, rgba(59,130,246,0.12), rgba(59,130,246,0.06))',
           border: '1px solid rgba(59,130,246,0.2)',
@@ -537,23 +606,26 @@ function Sidebar({ user, layerOn, popLayerOn, status, onEarthquakes, onPopulatio
         </button>
       )}
 
-      {/* ─── Keyboard hints ───────────────────────────────── */}
+      {/* ─── Controls hints ───────────────────────────────── */}
       <div style={{
         marginTop: 'auto', fontSize: 11, color: '#1e3a5f',
-        lineHeight: 2.4, borderTop: '1px solid rgba(99,179,255,0.06)',
+        lineHeight: 2.3, borderTop: '1px solid rgba(99,179,255,0.06)',
         paddingTop: 12, position: 'relative', zIndex: 1,
       }}>
-        {[['drag', 'Rotate'], ['scroll', 'Zoom'], ['click', 'Details']].map(([k, v]) => (
+        {(isMobile
+          ? [['1-finger', 'Rotate'], ['pinch', 'Zoom'], ['tap', 'Details']]
+          : [['drag', 'Rotate'], ['scroll', 'Zoom'], ['click', 'Details']]
+        ).map(([k, v]) => (
           <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{
               background: 'rgba(99,179,255,0.04)',
               border: '1px solid rgba(99,179,255,0.08)',
               borderRadius: 5, padding: '1px 7px', fontSize: 9,
-              color: '#1e3a5f', fontFamily: "var(--font-display)",
+              color: '#38bdf8', fontFamily: "var(--font-display)",
               letterSpacing: '0.06em', fontWeight: 500,
-              minWidth: 42, textAlign: 'center',
+              minWidth: isMobile ? 54 : 42, textAlign: 'center',
             }}>{k}</span>
-            <span style={{ color: '#334155' }}>{v}</span>
+            <span style={{ color: '#475569' }}>{v}</span>
           </div>
         ))}
         {!user && (
@@ -570,11 +642,32 @@ function Sidebar({ user, layerOn, popLayerOn, status, onEarthquakes, onPopulatio
       </div>
     </div>
   )
+
+  if (isMobile) {
+    return (
+      <>
+        <div
+          onClick={onClose}
+          style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(0,0,0,0.65)',
+            backdropFilter: 'blur(4px)',
+            zIndex: 45,
+            animation: 'fadeIn 0.2s ease',
+          }}
+        />
+        {drawerContent}
+      </>
+    )
+  }
+
+  return drawerContent
 }
 
 // ── Main App ─────────────────────────────────────────────────
 export default function App() {
-  const { user, loading: authLoading, login, register, logout } = useAuth()
+  const { user, login, register, logout } = useAuth()
+  const isMobile = useIsMobile(768)
   const canvasRef = useRef(null)
   const engineRef = useRef(null)
   const [selected, setSelected] = useState(null)
@@ -583,6 +676,7 @@ export default function App() {
   const [layerOn, setLayerOn] = useState(false)
   const [popLayerOn, setPopLayerOn] = useState(false)
   const [showAI, setShowAI] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -609,16 +703,22 @@ export default function App() {
           time: f.properties.time,
           type: f.properties.type,
           mag: f.properties.mag,
+          tsunami: f.properties.tsunami,
+          sig: f.properties.sig,
         },
       }))
 
       engineRef.current?.renderMarkers(points, 'cylinder')
       setStatus(`${points.length} earthquakes loaded`)
 
+      // Background index points into RAG
       try {
-        await aiService.indexPoints(points)
+        const topPoints = [...points].slice(0, 150)
+        aiService.indexPoints(topPoints).catch(err => {
+          console.warn('AI index non-fatal warning:', err.message)
+        })
       } catch (err) {
-        console.warn('AI index failed/network error', err)
+        console.warn('AI index setup error:', err.message)
       }
 
     } catch {
@@ -672,40 +772,255 @@ export default function App() {
   }
 
   return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', background: '#000000' }}>
+    <div style={{
+      position: 'relative',
+      width: '100vw',
+      height: '100vh',
+      height: '100dvh',
+      overflow: 'hidden',
+      background: '#000000'
+    }}>
       <canvas ref={canvasRef} style={{
         position: 'absolute', inset: 0,
         background: 'transparent',
+        touchAction: 'none',
       }} />
 
-        <Sidebar
-          user={user} layerOn={layerOn} popLayerOn={popLayerOn} status={status}
-          onEarthquakes={loadEarthquakes} onPopulation={loadPopulation}
-          onClear={clearLayer}
-          onShowAuth={() => setShowAuth(true)} onLogout={handleLogout}
-          onToggleAI={() => setShowAI(v => !v)}
-        />
-
-        {showAI && user && (
-          <AIChatPanel
-            onClose={() => setShowAI(false)}
-            onMarkersReceived={(markers) => {
-              engineRef.current?.renderMarkers(markers, 'cylinder')
-              setLayerOn(true)
-              setStatus(`AI highlighted ${markers.length} earthquakes`)
+      {/* ─── Mobile Header (Mobile only) ────────────────────── */}
+      {isMobile && (
+        <header style={{
+          position: 'fixed', top: 0, left: 0, right: 0,
+          height: 54, zIndex: 30,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '0 16px',
+          background: 'linear-gradient(180deg, rgba(4,10,24,0.92) 0%, rgba(4,10,24,0.6) 80%, transparent 100%)',
+          backdropFilter: 'blur(8px)',
+        }}>
+          {/* Hamburger toggle */}
+          <button
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Open menu"
+            style={{
+              width: 36, height: 36, borderRadius: 10,
+              background: 'rgba(99,179,255,0.08)',
+              border: '1px solid rgba(99,179,255,0.18)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              gap: 4, cursor: 'pointer',
             }}
-          />
-        )}
+          >
+            <span style={{ width: 16, height: 2, background: '#7dd3fc', borderRadius: 1 }} />
+            <span style={{ width: 12, height: 2, background: '#7dd3fc', borderRadius: 1, alignSelf: 'flex-start', marginLeft: 10 }} />
+            <span style={{ width: 16, height: 2, background: '#7dd3fc', borderRadius: 1 }} />
+          </button>
 
-        <InfoPanel data={selected} onClose={() => setSelected(null)} />
+          {/* Logo */}
+          <div style={{
+            fontFamily: "var(--font-display)", fontSize: 13, fontWeight: 700,
+            color: '#7dd3fc', letterSpacing: '0.12em',
+            display: 'flex', alignItems: 'center', gap: 8,
+          }}>
+            <div style={{
+              width: 8, height: 8, borderRadius: '50%',
+              background: 'linear-gradient(135deg, #60a5fa, #3b82f6)',
+              boxShadow: '0 0 8px #3b82f6',
+              animation: 'pulse 2.5s infinite',
+            }} />
+            TERRAVIZ 3D
+          </div>
 
-        {showAuth && (
-          <AuthModal
-            onClose={() => setShowAuth(false)}
-            login={login}
-            register={register}
-          />
-        )}
-      </div>
+          {/* AI or Auth button */}
+          <button
+            onClick={() => {
+              if (!user) { setShowAuth(true); return }
+              setShowAI(v => !v)
+            }}
+            style={{
+              padding: '6px 11px', borderRadius: 10,
+              background: 'rgba(139,92,246,0.12)',
+              border: '1px solid rgba(139,92,246,0.25)',
+              color: '#c4b5fd', fontSize: 11, fontWeight: 600,
+              fontFamily: "var(--font-display)", letterSpacing: '0.06em',
+              display: 'flex', alignItems: 'center', gap: 5,
+            }}
+          >
+            <span style={{ fontSize: 12 }}>◈</span> AI
+          </button>
+        </header>
+      )}
+
+      {/* ─── Mobile Floating Status Pill ───────────────────── */}
+      {isMobile && status && (
+        <div style={{
+          position: 'fixed', top: 60, left: '50%', transform: 'translateX(-50%)',
+          zIndex: 28,
+          fontSize: 10, color: '#38bdf8', padding: '5px 12px',
+          fontFamily: "var(--font-mono)", fontWeight: 500,
+          background: 'rgba(6,14,34,0.85)',
+          border: '1px solid rgba(56,189,248,0.25)',
+          borderRadius: 20, backdropFilter: 'blur(10px)',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+          animation: 'fadeIn 0.3s ease',
+          whiteSpace: 'nowrap',
+        }}>
+          ◎ {status}
+        </div>
+      )}
+
+      {/* ─── Sidebar (Drawer on mobile, left dock on desktop) ── */}
+      <Sidebar
+        user={user} layerOn={layerOn} popLayerOn={popLayerOn} status={status}
+        onEarthquakes={loadEarthquakes} onPopulation={loadPopulation}
+        onClear={clearLayer}
+        onShowAuth={() => setShowAuth(true)} onLogout={handleLogout}
+        onToggleAI={() => {
+          if (!user) { setShowAuth(true); return }
+          setShowAI(v => !v)
+        }}
+        isMobile={isMobile}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+
+      {/* ─── AI Chat Panel ─────────────────────────────────── */}
+      {showAI && user && (
+        <AIChatPanel
+          onClose={() => setShowAI(false)}
+          onMarkersReceived={(markers) => {
+            engineRef.current?.renderMarkers(markers, 'cylinder')
+            setLayerOn(true)
+            setStatus(`AI highlighted ${markers.length} earthquakes`)
+          }}
+          isMobile={isMobile}
+        />
+      )}
+
+      {/* ─── Marker Info Panel ─────────────────────────────── */}
+      <InfoPanel
+        data={selected}
+        onClose={() => setSelected(null)}
+        isMobile={isMobile}
+      />
+
+      {/* ─── Mobile Quick Action Dock (when no InfoPanel) ──── */}
+      {isMobile && !selected && !showAI && (
+        <div style={{
+          position: 'fixed',
+          bottom: 'calc(14px + env(safe-area-inset-bottom, 0px))',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 25,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 7,
+          background: 'rgba(6,14,34,0.85)',
+          backdropFilter: 'blur(16px)',
+          border: '1px solid rgba(99,179,255,0.18)',
+          borderRadius: 30,
+          padding: '6px 9px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.6), 0 0 20px rgba(59,130,246,0.12)',
+          maxWidth: 'calc(100vw - 28px)',
+          whiteSpace: 'nowrap',
+        }}>
+          <button
+            onClick={() => setSidebarOpen(true)}
+            style={{
+              padding: '7px 11px',
+              borderRadius: 20,
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              color: '#94a3b8',
+              fontSize: 11,
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5,
+              cursor: 'pointer',
+            }}
+          >
+            <span style={{ fontSize: 13 }}>☰</span> Menu
+          </button>
+
+          <button
+            onClick={loadEarthquakes}
+            style={{
+              padding: '7px 11px',
+              borderRadius: 20,
+              background: layerOn ? 'rgba(59,130,246,0.2)' : 'rgba(59,130,246,0.06)',
+              border: `1px solid ${layerOn ? 'rgba(59,130,246,0.45)' : 'rgba(59,130,246,0.15)'}`,
+              color: layerOn ? '#93c5fd' : '#60a5fa',
+              fontSize: 11,
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              cursor: 'pointer',
+            }}
+          >
+            <span style={{
+              width: 6, height: 6, borderRadius: '50%',
+              background: layerOn ? '#60a5fa' : 'rgba(99,179,255,0.3)',
+              boxShadow: layerOn ? '0 0 6px #60a5fa' : 'none',
+            }} />
+            Quakes
+          </button>
+
+          <button
+            onClick={loadPopulation}
+            style={{
+              padding: '7px 11px',
+              borderRadius: 20,
+              background: popLayerOn ? 'rgba(6,182,212,0.2)' : 'rgba(6,182,212,0.06)',
+              border: `1px solid ${popLayerOn ? 'rgba(6,182,212,0.45)' : 'rgba(6,182,212,0.15)'}`,
+              color: popLayerOn ? '#67e8f9' : '#22d3ee',
+              fontSize: 11,
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              cursor: 'pointer',
+            }}
+          >
+            <span style={{
+              width: 6, height: 6, borderRadius: '50%',
+              background: popLayerOn ? '#22d3ee' : 'rgba(6,182,212,0.3)',
+              boxShadow: popLayerOn ? '0 0 6px #22d3ee' : 'none',
+            }} />
+            Population
+          </button>
+
+          <button
+            onClick={() => {
+              if (!user) { setShowAuth(true); return }
+              setShowAI(true)
+            }}
+            style={{
+              padding: '7px 11px',
+              borderRadius: 20,
+              background: 'rgba(139,92,246,0.15)',
+              border: '1px solid rgba(139,92,246,0.3)',
+              color: '#c4b5fd',
+              fontSize: 11,
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5,
+              cursor: 'pointer',
+            }}
+          >
+            <span style={{ fontSize: 12 }}>◈</span> AI
+          </button>
+        </div>
+      )}
+
+      {/* ─── Auth Modal ────────────────────────────────────── */}
+      {showAuth && (
+        <AuthModal
+          onClose={() => setShowAuth(false)}
+          login={login}
+          register={register}
+          isMobile={isMobile}
+        />
+      )}
+    </div>
   )
 }

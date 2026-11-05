@@ -10,8 +10,9 @@ export function useAuth() {
     const fetchUser = async () => {
       try {
         const data = await authService.getMe();
-        setUser(data.user || null);
+        setUser(data.user || (data.userId ? data : null));
       } catch (err) {
+        if (typeof window !== 'undefined') localStorage.removeItem('tv3d_token');
         setUser(null);
       } finally {
         setLoading(false);
@@ -21,6 +22,7 @@ export function useAuth() {
     fetchUser();
 
     const handleAuthExpired = () => {
+      if (typeof window !== 'undefined') localStorage.removeItem('tv3d_token');
       setUser(null);
     };
 
@@ -33,6 +35,9 @@ export function useAuth() {
     setError(null);
     try {
       const data = await authService.login(username, password);
+      if (data.token && typeof window !== 'undefined') {
+        localStorage.setItem('tv3d_token', data.token);
+      }
       setUser(data.session?.user || data.user || null);
       return data;
     } catch (err) {
@@ -63,6 +68,7 @@ export function useAuth() {
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
+      if (typeof window !== 'undefined') localStorage.removeItem('tv3d_token');
       setUser(null);
     }
   };
