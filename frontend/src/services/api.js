@@ -17,11 +17,18 @@ export async function apiFetch(path, options = {}) {
     const response = await fetch(path, mergedOptions);
 
     if (response.status === 401) {
-        if (!options.silentAuthFail && typeof window !== 'undefined') {
+        let errorMsg = 'Authentication expired';
+        try {
+            const data = await response.json();
+            if (data.error) errorMsg = data.error;
+        } catch (e) {
+            // response was not JSON
+        }
+        if (!options.silentAuthFail && typeof window !== 'undefined' && errorMsg === 'Authentication expired') {
             localStorage.removeItem('tv3d_token');
             window.dispatchEvent(new CustomEvent('auth:expired'));
         }
-        throw new Error('Authentication expired');
+        throw new Error(errorMsg);
     }
 
     if (!response.ok) {

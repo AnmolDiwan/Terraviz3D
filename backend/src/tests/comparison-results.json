@@ -1,0 +1,377 @@
+[
+  {
+    "index": 1,
+    "query": "Show earthquakes in Japan",
+    "retrievedCount": 8,
+    "old": {
+      "output": "**Earthquakes in Japan**\n\n| Magnitude | Location |\n|-----------|----------|\n| 5.1 | Volcano Islands |\n| 4.7 | Izu Islands |\n| 4.5 | Volcano Islands |\n| 4.9 | Volcano Islands |\n| 4.6 | Volcano Islands |\n\nThese five events are the only earthquakes listed in the provided context that occurred within the Japan region.",
+      "scores": {
+        "answer_first": 0,
+        "interprets_data": 0,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 2
+      }
+    },
+    "new": {
+      "output": "The latest activity in Japan shows five recent quakes—four in the Volcano Islands and one in the Izu Islands—ranging from M 4.5 to M 5.1. A magnitude 5.0‑level quake produces noticeable shaking and rattles dishes, but rarely causes major damage; the M 4.5‑M 4.9 events are even milder, felt mainly as a light tremor. None of these events triggered a tsunami alert.  \n\nTurn the globe toward the north‑western Pacific and focus on the Volcano Islands cluster and the Izu archipelago to see where these quakes occurred.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 2,
+    "query": "Any big ones recently?",
+    "retrievedCount": 8,
+    "old": {
+      "output": "**Recent significant earthquake**\n\n| Magnitude | Location |\n|-----------|----------|\n| **5.2** | 55 km NNW of Ruteng, Indonesia |\n\nAll other events listed are below magnitude 5.0 (ranging from 4.5 to 4.9).",
+      "scores": {
+        "answer_first": 0,
+        "interprets_data": 0,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 2
+      }
+    },
+    "new": {
+      "output": "There have been no large earthquakes in the last few weeks— the strongest event was a moderate M 5.2 near Ruteng, Indonesia, which would feel like a noticeable shake but is unlikely to cause major damage. The other quakes are all M 4.5–4.9, which produce light rattling and are considered minor. If you want to see how these fit into the broader Pacific “Ring of Fire,” rotate the globe toward Indonesia and the East Pacific Rise to view the fault‑zone clusters.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 3,
+    "query": "Is the Pacific rim active right now?",
+    "retrievedCount": 8,
+    "old": {
+      "output": "Yes.  Recent seismicity shows that the Pacific Rim is currently active.  The following moderate‑magnitude earthquakes have been recorded:\n\n| Magnitude | Location |\n|-----------|----------|\n| 4.6 | Southern East Pacific Rise |\n| 4.8 | Southern East Pacific Rise |\n| 4.8 | Southern East Pacific Rise |\n| 4.9 | Southern East Pacific Rise |\n| 4.9 | Southern East Pacific Rise |\n| 4.5 | Southern East Pacific Rise |\n| 4.9 | Southern East Pacific Rise |\n| 4.9 | State of Yap, Federated States of Micronesia |\n\nThese events, all occurring within the last few days, indicate ongoing tectonic activity along the Pacific Rim.",
+      "scores": {
+        "answer_first": 0,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 3
+      }
+    },
+    "new": {
+      "output": "Yes, the Pacific Rim is showing normal background seismic activity right now, with a handful of moderate quakes.\n\n- All eight recent events are in the southern part of the East Pacific Rise and one near Yap, each between M 4.5 and M 4.9.  \n- Magnitudes in this range produce only minor shaking—usually felt only by people inside buildings and rarely causing damage.  \n- None of the events triggered tsunamis, and the depth and offshore locations keep any risk to coastal communities low.\n\nSpin the globe toward the Pacific Ocean and zoom in on the East Pacific Rise to see these quakes cluster along the mid‑ocean ridge, a typical pattern of steady tectonic motion.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 4,
+    "query": "Where was the strongest earthquake this month?",
+    "retrievedCount": 8,
+    "old": {
+      "output": "The strongest earthquake recorded this month was a **magnitude 5.3** event that occurred at the **Reykjanes Ridge** (off the southwest coast of Iceland).",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    },
+    "new": {
+      "output": "The strongest event this month was a magnitude 5.3 quake on the Reykjanes Ridge on October 21 – it’s the largest of the eight recorded and would produce noticeable shaking in nearby Icelandic towns, though it’s unlikely to cause major structural damage.  \n- It’s higher than any Chilean quake (the next‑largest was M 5.2 near San Antonio).  \n- The Reykjanes Ridge is a well‑known volcanic‑seismic zone, so this event fits the usual pattern there.  \n\nRotate the globe to the Reykjanes Ridge area to see the cluster of recent activity.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 5,
+    "query": "Are there tsunamis?",
+    "retrievedCount": 8,
+    "old": {
+      "output": "**Answer:**  \nNo tsunamis are reported in the provided context.",
+      "scores": {
+        "answer_first": 0,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 3
+      }
+    },
+    "new": {
+      "output": "No tsunamis were generated by any of the eight recent events. All earthquakes, ranging from moderate M 5.7–5.9 to minor M 4.5–4.6, occurred at distances of 39–205 km from the nearest coast and were not accompanied by a tsunami warning. You can view the offshore locations on the globe and see how they line up with the surrounding trench systems; spinning toward Indonesia and Vanuatu will show the clusters of these moderate shocks.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 6,
+    "query": "earthquakes near india",
+    "retrievedCount": 8,
+    "old": {
+      "output": "",
+      "scores": {
+        "answer_first": 0,
+        "interprets_data": 0,
+        "no_filler": 1,
+        "matches_register": 0,
+        "total": 1
+      }
+    },
+    "new": {
+      "output": "The latest activity near India is a moderate M 5.4 quake on the Mid‑Indian Ridge, followed by several minor M 4.5‑4.8 events around the Andaman‑Nicobar region and the eastern Indian mainland.  \n\n- The M 5.4 event (11 Oct 2026) produced noticeable shaking for nearby coastal communities but did not trigger a tsunami, and its depth keeps damage risks low.  \n- The M 4.6 quake 170 km SSE of Port Blair (15 Oct 2026) and the other M 4.5‑4.8 events are typical background activity for this tectonically active zone; they can feel as light rattling but rarely cause structural damage.  \n- The clustering of shallow events along the Mid‑Indian Ridge and the Andaman‑Nicobar area reflects the ongoing subduction of the Indian Plate beneath the Burma Plate.\n\n**Next step:** spin the globe toward the eastern Indian Ocean to view the ridge and the Andaman‑Nicobar fault zone, and watch how these recent quakes line up with the tectonic boundaries.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 7,
+    "query": "What's happening in South America?",
+    "retrievedCount": 8,
+    "old": {
+      "output": "**South America – Recent seismic activity**\n\n| Date (assumed) | Magnitude | Location (South America) | Notes |\n|----------------|-----------|--------------------------|-------|\n| — | 4.6 | 22 km SW of Sipí, Colombia | Near the western edge of the Colombian Andes. |\n| — | 5.2 | Off the coast of Ecuador | Offshore seismicity along the Ecuadorian coast. |\n| — | 4.6 | 34 km WSW of Sipí, Colombia | Another event close to Sipí, indicating a cluster of activity. |\n| — | 4.5 | 51 km ESE of Juradó, Colombia | Near the Pacific coast of Colombia. |\n| — | 4.6 | 10 km NW of Chaparral, Colombia | In the western Colombian region. |\n| — | 4.8 | 5 km NW of Cepitá, Colombia | Very close to the town of Cep",
+      "scores": {
+        "answer_first": 0,
+        "interprets_data": 0,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 2
+      }
+    },
+    "new": {
+      "output": "South America is experiencing routine, background seismicity with a handful of moderate‑to‑minor earthquakes, none of which pose a major danger to the region.\n\n- In Colombia, four quakes ranging from M 4.5 to M 4.8 occurred in the western Cordillera and near the city of Sipí, producing only light shaking that would be felt by residents but unlikely to damage buildings.  \n- Ecuador recorded a single M 5.2 event offshore, which can generate noticeable tremors along the coast but, being shallow and offshore, it did not trigger a tsunami alert.  \n- No large or destructive events have been reported in the past month.\n\nIf you want to see how these quakes line up with Colombia’s fault systems, rotate the globe toward the western Andes and watch the cluster of points near Sipí and the Ecuadorian coast.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 8,
+    "query": "How many quakes over magnitude 6?",
+    "retrievedCount": 8,
+    "old": {
+      "output": "There are **0** earthquakes in the list with a magnitude greater than 6.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 0,
+        "no_filler": 1,
+        "matches_register": 0,
+        "total": 2
+      }
+    },
+    "new": {
+      "output": "Two earthquakes recorded this month exceeded magnitude 6.0—one off Vanuatu and another near La Tronosa, Panama. A magnitude 6.0 quake is strong enough to produce noticeable shaking, potential structural damage in nearby communities, and can trigger local seismic alerts, but it is less likely to cause widespread devastation compared to M 7+ events.  \n\n- The Vanuatu quake (M 6.0) occurred 186 km northwest of Port‑Olry, an area with a history of moderate‑to‑strong events; residents in coastal villages may have felt significant tremors.  \n- The Panama quake (M 6.0) was just 7 km north of La Tronosa, close enough that nearby towns could experience shaking and possible minor structural concerns.  \n\nTo see how these events fit into regional patterns, spin the globe toward the South Pacific and the Central American coast and explore the surrounding fault zones.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 9,
+    "query": "Is California okay?",
+    "retrievedCount": 8,
+    "old": {
+      "output": "Based on the events listed in the provided context, there are no earthquakes reported in California. All the recorded seismic activity concerns the southern East Pacific Rise and one event in Yap, Federated States of Micronesia. Therefore, according to this information, California is not affected and can be considered “okay.”",
+      "scores": {
+        "answer_first": 0,
+        "interprets_data": 0,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 2
+      }
+    },
+    "new": {
+      "output": "California has not experienced any recent earthquakes above magnitude 4.5, so there are no major shaking events to worry about right now. The data show only minor quakes (M 4.5–4.9) off the southern East Pacific Rise and a single M 4.9 near Yap, which are far from California and would not produce noticeable shaking on land. California’s seismicity remains at its typical background level, with occasional small tremors that rarely cause damage.  \n\n- Spin the globe toward the West Coast to see the California fault zones and compare the frequency of local quakes with the global background.  \n- If you want to check the latest local activity, switch the layer to “California” or “USGS California” for real‑time updates.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 0,
+        "total": 3
+      }
+    }
+  },
+  {
+    "index": 10,
+    "query": "Tell me about the Ring of Fire activity",
+    "retrievedCount": 8,
+    "old": {
+      "output": "**Ring of Fire activity (Pacific Rim)**  \n\nThe Ring of Fire is the arc of intense seismic and volcanic activity that circles the Pacific Ocean. It includes the western coasts of the Americas, the eastern coasts of Asia and Australia, and the islands of the Pacific. In the recent data you provided, the following events fall within or adjacent to this region:\n\n| Date (not specified in the context) | Magnitude | Location (within or near the Ring of Fire) |\n|-------------------------------------|-----------|-------------------------------------------|\n| — | **5.1** | 31 km NW of **Bāgeshwar, India** (Indian sub‑continent, part of the Indo‑Annamite seismic belt that connects to the Pacific Rim) |\n| — | **5.1** | **Volcano Islands, Japan region** (Japanese archipelago, a key segment of the Ring of Fire) |\n| — | **4.9** | **Volcano Islands, Japan region** |\n| — | **4.6** | **Volcano Islands, Japan region** |\n| — | **4.5** | **Volcano Islands, Japan region** |\n\n**Key points**\n\n- **Japan** is one of the most seismically active countries on the Ring of Fire, with frequent earthquakes and volcanic eruptions. The Volcano Islands (which include Iwo Jima and Iwo To) are located on the western edge of the Pacific Plate and are subject to regular",
+      "scores": {
+        "answer_first": 0,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 3
+      }
+    },
+    "new": {
+      "output": "The Pacific “Ring of Fire” is showing only moderate, shallow earthquakes this month—most events are M 4.5‑5.1, which produce noticeable shaking but rarely cause serious damage or tsunamis.\n\n- In the Japanese Volcano Islands, several M 5.0‑5.1 quakes occurred at depths just a few kilometers below the surface, giving local residents some rattling but no tsunami risk.  \n- Afghanistan and nearby India recorded similar‑magnitude quakes (M 4.6‑5.1) in the same shallow depth range, again causing mild to moderate shaking with no tsunami alerts.  \n- No large (M 6+) events or tsunami warnings have appeared along the Ring of Fire this month, so the overall seismic risk remains at normal background levels.\n\nSpin the globe toward the Pacific Rim to see how these shallow quakes line up along the active subduction zones that define the Ring of Fire.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 11,
+    "query": "yo whats shaking",
+    "retrievedCount": 8,
+    "old": {
+      "output": "Here are the recent seismic events from the provided context:\n\n| # | Magnitude | Location |\n|---|-----------|----------|\n| 1 | 5.0 | 31 km NW of Jiangyou, China |\n| 2 | 4.6 | 18 km S of Guyuan, China |\n| 3 | 5.8 | 1 km S of El Cacao, Panama |\n| 4 | 4.7 | 76 km NNE of Yonakuni, Japan |\n| 5 | 4.7 | 10 km S of La Mesa, Panama |\n| 6 | 5.5 | 75 km S of Yonakuni, Japan |\n| 7 | 4.9 | State of Yap, Federated States of Micronesia |\n| 8 | 4.6 | 19 km NW of Yongning, China |\n\nThese are all the earthquakes listed in the context.",
+      "scores": {
+        "answer_first": 0,
+        "interprets_data": 0,
+        "no_filler": 1,
+        "matches_register": 0,
+        "total": 1
+      }
+    },
+    "new": {
+      "output": "The biggest shake this month was a moderate M 5.8 just south of El Cacao, Panama – enough to feel strong but unlikely to damage buildings. The other events (M 4–5) were minor, producing only light rattling and no tsunami risk.  \n- M 5.8 in Panama: noticeable shaking, no damage.  \n- M 5.0–5.5 in China and Japan: moderate, felt locally, no major impact.  \n- M 4–4.7 in Panama, China, Micronesia: light, hardly felt.  \n\nSpin the globe toward Panama to see the cluster of recent quakes along its coast.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 12,
+    "query": "Show me everything near Indonesia",
+    "retrievedCount": 8,
+    "old": {
+      "output": "**Earthquakes near Indonesia**\n\n| Magnitude | Distance & Direction | Proximate Location |\n|-----------|----------------------|--------------------|\n| 4.5 | 99 km WNW | Tobelo, Indonesia |\n| 4.6 | 100 km SSW | Kencong, Indonesia |\n| 5.0 | 21 km SW | Meulaboh, Indonesia |\n| 5.1 | 133 km WNW | Ternate, Indonesia |\n| 4.6 | 156 km NW | Ternate, Indonesia |\n| 4.6 | 184 km W | Fakfak, Indonesia |\n| 5.2 | 149 km W | Gorontalo, Indonesia |\n| 5.2 | 180 km S | Pelabuhanratu, Indonesia |",
+      "scores": {
+        "answer_first": 0,
+        "interprets_data": 0,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 2
+      }
+    },
+    "new": {
+      "output": "All eight recent earthquakes recorded around Indonesia are moderate to minor, with magnitudes ranging from 4.5 to 5.2, and none triggered tsunamis.  \n- The strongest event, an M 5.2, produces only light‑to‑moderate shaking that can be felt but rarely causes significant damage in well‑built buildings.  \n- These quakes are spread across the northern and western archipelago, highlighting the active Sunda and Banda Sea subduction zones that keep the region seismically busy.  \n- Because no tsunami alerts were issued, coastal communities are not facing an immediate wave threat.  \n\n**Next step**  \n- Rotate the globe toward Indonesia, zoom into the Banda Sea area, and examine the fault‑zone overlays to see how these moderate events line up with the tectonic boundaries.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 13,
+    "query": "Should I be worried about earthquakes in Turkey?",
+    "retrievedCount": 8,
+    "old": {
+      "output": "**Recent earthquakes in Turkey**\n\n| Magnitude | Location |\n|-----------|----------|\n| 5.0 | 21 km ESE of Feke |\n| 4.7 | 21 km SSE of Saimbeyli |\n\n**Should you be worried?**  \n- **Magnitude 5** is considered a moderate earthquake that can cause noticeable shaking and potentially damage structures, especially if they are older or poorly built.  \n- **Magnitude 4.7** is on the lower end of the moderate range; it usually produces only light shaking and minor damage.\n\nTurkey sits on several active fault zones, so earthquakes are a regular occurrence, especially in the eastern and southeastern regions. If you live near the reported epicenters (Feke or Saimbeyli) or in other seismically active parts of the country, it is wise to:\n\n1. **Stay informed** – follow local news and official seismic alerts.  \n2. **Prepare**",
+      "scores": {
+        "answer_first": 0,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 3
+      }
+    },
+    "new": {
+      "output": "Turkey’s recent quakes are moderate (M 5 and M 4.7), which can produce noticeable shaking and some light damage but are not the kind of large, destructive events that would trigger widespread emergency alerts.  \n- The M 5 quake near Feke is the strongest of the two, and while it can shake buildings and rattles windows, it is far from the catastrophic M 7+ range that can topple structures or trigger tsunamis.  \n- The M 4.7 near Saimbeyli is even less intense, usually causing only minor discomfort.  \n- Both events occurred in an area that is seismically active, but they are typical background activity rather than a sudden spike in danger.\n\nIf you want to stay informed, rotate the globe to the eastern Anatolia region and zoom in on the North Anatolian Fault line to see how these recent events fit into the broader seismic pattern.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 14,
+    "query": "Compare Japan and Chile seismic activity",
+    "retrievedCount": 8,
+    "old": {
+      "output": "**Seismic activity in the two regions (based on the provided events)**  \n\n| Region | Number of events | Magnitudes (sorted) | Notable locations |\n|--------|------------------|---------------------|-------------------|\n| **Japan (Kuril Islands)** | 4 | 4.5, 4.6, 4.7, 4.7 | Kuril Islands (Russian‑Japanese archipelago) |\n| **Chile (West Chile Rise)** | 2 | 4.5, 4.6 | West Chile Rise (off the coast of Chile) |\n\n**Comparison**\n\n- **Frequency**: Japan experienced twice as many recorded events (4) as Chile (2) during the same period.\n- **Magnitude range**:",
+      "scores": {
+        "answer_first": 0,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 3
+      }
+    },
+    "new": {
+      "output": "Chile’s recent activity shows only two moderate‑to‑minor quakes, both around magnitude 4.5–4.6, off the West Chile Rise, which means only light shaking and no damage risk.  \nIn contrast, the Kuril Islands—part of the broader Japan seismic zone—have recorded five similar‑size events (4.5–4.7) in the past month, indicating a slightly higher frequency of activity, though still below the threshold for significant damage.  \nThe single M5 event near the Auckland Islands is the most powerful in this dataset and sits outside the main Japan–Chile comparison.  \n\nTo see how these patterns fit into the larger tectonic setting, spin the globe toward the Pacific Ring of Fire and examine the subduction trenches that link Chile and Japan.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  },
+  {
+    "index": 15,
+    "query": "What does magnitude 5 feel like?",
+    "retrievedCount": 8,
+    "old": {
+      "output": "A magnitude‑5 earthquake is a **moderate‑strength event** that most people in the vicinity will feel, but it rarely causes serious damage.  \n\n| What you’ll feel | Typical description | Typical impact |\n|------------------|---------------------|----------------|\n| **Shaking** | A noticeable, steady shake—often described as “the ground moving like a truck or a large vehicle passing by.” | Usually no structural damage, but poorly built or older buildings can suffer minor cracks or loose fixtures. |\n| **Rattling of objects** | Items on shelves, windows, or hanging objects may rattle or sway. | Minor breakage of loose items (e.g., glass, ceramics). |\n| **Sound** | A low, rumbling noise that can be heard inside buildings. | Rarely audible outside the immediate area. |\n| **Duration** | A few seconds to a minute, depending on depth and distance. | The",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    },
+    "new": {
+      "output": "A magnitude‑5 earthquake feels like a moderate shake that can rattle dishes, cause loose objects to move, and make people feel a brief jolt—similar to a strong thunderstorm but without major damage.  \n- The shaking is strong enough to be felt on most floors of a building, but it rarely cracks walls or breaks windows.  \n- In populated areas, people might hear a “whoosh” and feel a sudden lift or drop, but structural damage is uncommon unless the quake is shallow and close to the epicenter.  \n- Because it’s above the threshold for “noticeable” but below the level that triggers widespread alarms, most residents simply experience a brief, unsettling tremor.  \n\nIf you’re curious how this plays out in Japan, rotate the globe to the southwestern islands and hover over the 5.5 event near Yonakuni to see the exact epicenter and depth—this will give you a concrete sense of how a magnitude‑5 quake feels in that region.",
+      "scores": {
+        "answer_first": 1,
+        "interprets_data": 1,
+        "no_filler": 1,
+        "matches_register": 1,
+        "total": 4
+      }
+    }
+  }
+]

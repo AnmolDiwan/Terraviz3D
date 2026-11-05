@@ -51,7 +51,7 @@ function AuthModal({ onClose, login, register, isMobile }) {
       await login(form.username, form.password)
       onClose()
     } catch (err) {
-      if (err.message === 'Failed to fetch' || err.message.includes('Authentication expired')) {
+      if (err.message === 'Failed to fetch' || err.message.toLowerCase().includes('networkerror')) {
         setError('Cannot connect to server. Is the backend running?')
       } else {
         setError(err.message)

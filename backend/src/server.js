@@ -37,7 +37,8 @@ app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false
 }))
-app.use(cors({ origin: env.FRONTEND_URL || true, credentials: true }))
+const corsOrigin = (!env.FRONTEND_URL || env.FRONTEND_URL === '*') ? true : env.FRONTEND_URL
+app.use(cors({ origin: corsOrigin, credentials: true }))
 app.use(express.json({ limit: '10mb' }))
 app.use(cookieParser())
 app.use(express.static(publicPath))
