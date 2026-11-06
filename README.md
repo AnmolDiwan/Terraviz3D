@@ -8,6 +8,9 @@ The infrastructure is automated using Terraform (Infrastructure as Code) followi
 - **Cloud Provider:** Amazon Web Services (AWS)
 - **Deployment Region:** us-east-1 (High Availability across 2 Availability Zones)
 - **Edge Routing & Security:** Cloudflare
+- **Demo Credentials:**
+  - **Username:** `abcd`
+  - **Password:** `abcdef`
 
 ---
 
@@ -116,6 +119,7 @@ The platform includes an AI seismologist assistant built directly into the 3D gl
 
 ### 4. User Authentication & Access Control Service
 The authentication service provides identity management and session isolation:
+- **Demo Access:** Pre-configured demo account available for live evaluation — Username: `abcd`, Password: `abcdef`.
 - **Stateless Tokens:** JSON Web Tokens (JWT) signed with HMAC-SHA256, transmitted in `HttpOnly`, `SameSite=Lax` cookies and Bearer headers.
 - **Credential Security:** Passwords hashed with `bcryptjs` and salt rounds.
 - **Brute Force Protection:** Automatic account lockout after 5 consecutive failed login attempts (15-minute lockout period).
@@ -127,7 +131,8 @@ The authentication service provides identity management and session isolation:
 
 ### 5. Mobile Responsive Interface Service
 The application includes a touch-optimized mobile experience designed for smartphones and tablets:
-- **Touch Gestures:** Native 1-finger orbit rotation, 2-finger pinch-to-zoom (clamped between 1.2x and 4.0x radius), and touch-tap marker selection with `touch-action: none` isolation.
+- **Adaptive Frustum Fitting:** Dynamically calculates camera distance based on viewport aspect ratio so the globe boundaries fit cleanly within mobile portrait screens with side margins on initial load.
+- **Touch Gestures:** Native 1-finger orbit rotation, 2-finger pinch-to-zoom (clamped between 1.2x and 14.0x radius), and touch-tap marker selection with `touch-action: none` isolation.
 - **Ergonomic Navigation:** Compact mobile top bar, off-canvas slide-out drawer, floating bottom quick-actions dock, and draggable bottom sheets for the AI assistant and event inspector.
 
 ![TerraViz Mobile Responsive Service](docs/screenshots/mobile-responsive-service.png)
