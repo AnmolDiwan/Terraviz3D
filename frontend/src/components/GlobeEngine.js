@@ -110,8 +110,7 @@ export class GlobeEngine {
     this.camera = new THREE.PerspectiveCamera(
       45, window.innerWidth / window.innerHeight, 0.1, 1000
     )
-    const isMobile = window.innerWidth < 768
-    this.camera.position.z = isMobile ? 3.35 : 2.5
+    this.camera.position.z = this.getDefaultCameraZ()
 
     // Lighting — clean sun + dim ambient
     const sun = new THREE.DirectionalLight(0xfff5e4, 2.0)
@@ -357,7 +356,8 @@ export class GlobeEngine {
 
     this._onWheel = (e) => {
       e.preventDefault()
-      const MIN = 1.2, MAX = 4.0
+      const isPortrait = (window.innerWidth / window.innerHeight) < 1
+      const MIN = 1.2, MAX = isPortrait ? 14.0 : 6.0
       this.camera.position.z = Math.max(MIN, Math.min(MAX, this.camera.position.z + e.deltaY * 0.001))
     }
 
@@ -413,7 +413,8 @@ export class GlobeEngine {
         )
         if (currentDist > 0) {
           const ratio = this.pinchStartDist / currentDist
-          const MIN = 1.2, MAX = 4.0
+          const isPortrait = (window.innerWidth / window.innerHeight) < 1
+          const MIN = 1.2, MAX = isPortrait ? 14.0 : 6.0
           this.camera.position.z = Math.max(MIN, Math.min(MAX, this.pinchStartCamZ * ratio))
         }
         this.touchMoved = true
@@ -447,6 +448,20 @@ export class GlobeEngine {
     c.addEventListener('touchend', this._onTouchEnd, { passive: true })
 
     window.addEventListener('resize', this._onResize)
+  }
+
+  getDefaultCameraZ() {
+    const aspect = window.innerWidth / window.innerHeight
+    // In portrait orientation (mobile/tablets, aspect < 1), horizontal width is the limiting dimension.
+    // Frustum half-width: xMax = z * tan(fov / 2) * aspect.
+    // With fov = 45 deg, tan(22.5 deg) ~ 0.41421.
+    // Target xMax ~ 1.36 so the globe (radius 1.0) occupies ~73% of screen width,
+    // ensuring the edges of the globe and atmosphere are comfortably inside the screen with padding.
+    if (aspect < 1) {
+      const halfTan = Math.tan((45 * Math.PI) / 360)
+      return Math.max(2.5, 1.36 / (halfTan * aspect))
+    }
+    return 2.5
   }
 
   _handlePointerSelect(clientX, clientY) {
